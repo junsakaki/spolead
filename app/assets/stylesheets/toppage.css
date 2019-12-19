@@ -1,0 +1,10 @@
+body {
+  background: linear-gradient(#05FBFF, #1D62F0 ) fixed;
+}
+
+p {
+  font-family: Meiryo, "Hiragino Kaku Gothic Pro W3", Courier New, sans-serif;
+  line-height: 1.5;
+  margin-bottom: 25px;
+  color: #fff;
+}
