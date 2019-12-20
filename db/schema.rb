@@ -10,7 +10,67 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_16_070905) do
+ActiveRecord::Schema.define(version: 2019_12_20_063442) do
+
+  create_table "cities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.string "kana"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "prefectures", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.string "kana"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "reviews", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "team_id"
+    t.string "gender"
+    t.string "age"
+    t.string "enrollment"
+    t.integer "player_flag"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "general_star"
+    t.text "general_post"
+    t.integer "policy_star"
+    t.text "policyl_post"
+    t.integer "organization_star"
+    t.text "organization_post"
+    t.integer "activity_star"
+    t.text "activity_post"
+    t.integer "environment_star"
+    t.text "environment_post"
+    t.integer "event_star"
+    t.text "event_post"
+    t.integer "cost_star"
+    t.text "cost_post"
+    t.index ["team_id"], name: "index_reviews_on_team_id"
+    t.index ["user_id"], name: "index_reviews_on_user_id"
+  end
+
+  create_table "sports", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "teams", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.integer "sport_id"
+    t.string "prefecture"
+    t.string "city"
+    t.integer "school_flag"
+    t.integer "target_flag"
+    t.text "comment"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -20,4 +80,6 @@ ActiveRecord::Schema.define(version: 2019_12_16_070905) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "reviews", "teams"
+  add_foreign_key "reviews", "users"
 end
