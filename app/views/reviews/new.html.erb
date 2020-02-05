@@ -1,0 +1,89 @@
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.raty.js"></script>
+
+<div class="text-center">
+  <h1>口コミ投稿フォーム</h1>
+</div>
+
+<div class="row">
+  <div class="col-sm-6 offset-sm-3">
+    <%= form_for @review do |f| %>
+      <%= form_with(model: @review, local: true) do |f| %>
+        <table class="table table-bordered">
+          <tr>
+            <th class="text-left">性別</th>
+        <td>
+          <%= f.radio_button :gender, :male %>
+          <%= f.label :gender, "男性", {value: :male, style: "display: inline-block;"} %>
+          <%= f.radio_button :gender, :female %>
+          <%= f.label :gender, "女性", {value: :female, style: "display: inline-block;"} %>
+        </td>
+      <% end %>
+      </tr>
+      <tr>
+      <%= form_with(model: @review, local: true) do |f| %>
+        <th class="text-left">年代</th>
+        <td>
+          <%= f.radio_button :age, :kids %>
+          <%= f.label :age, "キッズ", {value: :kids, style: "display: inline-block;"} %>
+          <%= f.radio_button :age, :junior %>
+          <%= f.label :age, "小学生", {value: :junior, style: "display: inline-block;"} %>
+          <%= f.radio_button :age, :jhighscool %>
+          <%= f.label :age, "中学生", {value: :jhighscool, style: "display: inline-block;"} %>      
+          <%= f.radio_button :age, :highscool %>
+          <%= f.label :age, "高校生", {value: :highscool, style: "display: inline-block;"} %>      
+        </td>
+      <% end %>
+      </tr>
+      <tr>
+        <th class="text-left">在籍年</th>
+        <td>
+          <%= f.select :enrollment, [["2019年", "2019"],["2018年", "2018"], ["2017年", "2017"], ["2016年", "2016"],["～2015年", "2015"]]%>
+        </td>
+      </tr>
+      <tr>
+        <th class="text-left">あなたの立場</th>
+        <td>
+          <%= f.radio_button :player_flag, :１ %>
+          <%= f.label :player_flag, "プレーヤー", {value: :１, style: "display: inline-block;"} %>
+          <%= f.radio_button :player_flag, :０ %>
+          <%= f.label :player_flag, "保護者", {value: :０, style: "display: inline-block;"} %>
+        </td> 
+      </tr>
+        </table>
+      <h4>チーム口コミ評価</h4>
+    <div class="form-group row" id="star">
+      <%= f.label :general_star,'総合評価 ', class:'col-md-3 col-form-label' %>
+      <%= f.hidden_field :general_star, id: :review_star %>
+    </div>
+    
+    <script>
+    $('#star').raty({
+      size     : 36,
+      starOff:  '<%= asset_path('star-off.png') %>',
+      starOn : '<%= asset_path('star-on.png') %>',
+      starHalf: '<%= asset_path('star-half.png') %>',
+      scoreName: 'general_star[rate]',
+      half: true,
+    });
+    </script>  
+      
+    <div class="form-group row">
+      <%= f.label :general_post, '口コミ内容 ', class:'col-md-3 col-form-label' %>
+      <div class="col-md-9">
+        <%= f.text_area :general_post, class: "form-control", rows: "8",
+          placeholder:'口コミ内容がなくても、評価のみでも投稿できます。
+  まずは投稿してみましょう！投稿してから編集もできますよ！' %>
+    </div>
+  </div>        
+        
+        
+        <%= f.submit '登録', class: 'btn btn-primary btn-block' %>
+      <% end %>
+    
+    <p></p>  
+    <div class="text-center">
+        <%= link_to 'トップに戻る', root_url, class: 'btn btn-lg btn-secondary' %>
+    </div>
+  </div>
+</div>

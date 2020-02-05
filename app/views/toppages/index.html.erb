@@ -11,16 +11,20 @@
     </div>
     <div class="row">
     　<div class="col-sm-6 offset-sm-3">
-        <%= link_to 'サッカー', signup_path, class: 'btn btn-lg btn-warning rounded-0' %>
-        <%= link_to 'ベースボール', signup_path, class: 'btn btn-lg btn-warning rounded-0' %>
-        <%= link_to 'バレーボール', signup_path, class: 'btn btn-lg btn-warning rounded-0' %>
-        <%= link_to 'ダンス', signup_path, class: 'btn btn-lg btn-warning rounded-0' %>
+        <%= link_to 'サッカー', teams_path, class: 'btn btn-lg btn-warning' %>
+        <%= link_to 'ベースボール',teams_path, class: 'btn btn-lg btn-warning' %>
+        <%= link_to 'バレーボール',teams_path, class: 'btn btn-lg btn-warning' %>
+        <%= link_to 'ダンス', teams_path, class: 'btn btn-lg btn-warning' %>
       </div>
+    </div>
+    <p></p>
+    <div class="row">
       <div class="col-sm-6 offset-sm-4">
-        <%= link_to 'バスケ', signup_path, class: 'btn btn-lg btn-warning rounded-0' %>
-        <%= link_to 'ラグビー', signup_path, class: 'btn btn-lg btn-warning rounded-0' %>
-        <%= link_to 'スイミング', signup_path, class: 'btn btn-lg btn-warning rounded-0' %>
+        <%= link_to 'バスケ', teams_path, class: 'btn btn-lg btn-warning' %>
+        <%= link_to 'ラグビー', teams_path, class: 'btn btn-lg btn-warning' %>
+        <%= link_to 'スイミング', teams_path, class: 'btn btn-lg btn-warning' %>
     　</div>
+    </div>
     　<div class="col-sm-6 offset-sm-5">
     　    <p></p>
     　  <%= link_to 'ユーザ登録', signup_path, class: 'btn btn-lg btn-primary' %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_20_063442) do
+ActiveRecord::Schema.define(version: 2019_12_24_082237) do
 
   create_table "cities", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -35,19 +35,19 @@ ActiveRecord::Schema.define(version: 2019_12_20_063442) do
     t.integer "player_flag"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "general_star"
+    t.float "general_star"
     t.text "general_post"
-    t.integer "policy_star"
+    t.float "policy_star"
     t.text "policyl_post"
-    t.integer "organization_star"
+    t.float "organization_star"
     t.text "organization_post"
-    t.integer "activity_star"
+    t.float "activity_star"
     t.text "activity_post"
-    t.integer "environment_star"
+    t.float "environment_star"
     t.text "environment_post"
-    t.integer "event_star"
+    t.float "event_star"
     t.text "event_post"
-    t.integer "cost_star"
+    t.float "cost_star"
     t.text "cost_post"
     t.index ["team_id"], name: "index_reviews_on_team_id"
     t.index ["user_id"], name: "index_reviews_on_user_id"
