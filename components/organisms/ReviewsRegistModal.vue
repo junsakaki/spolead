@@ -10,22 +10,35 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="username"
+                  autocomplete="投稿者名(任意)"
+                  label="投稿者名(任意)"
+                />
+              </v-col>
+              <v-col cols="12" sm="6">
+                <!-- dammy for adjust layout -->
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-select
+                  v-model="player_flag"
+                  :items="playerFlagList"
+                  label="あなたの立場"
+                  item-text="playerType"
+                  item-value="playerFlag"
+                />
+              </v-col>              
+              <v-col cols="12" sm="6">
                 <v-select
                   v-model="gender_id"
                   :items="genderTypeList"
-                  label="あなたの性別"
+                  label="性別"
                   item-text="gender"
                   item-value="genderId"
                   required
                 />
               </v-col>
               <v-col cols="12" sm="6">
-                <v-select
-                  :items="['2015〜2020', '2010〜2014', '2005〜2009', '2000〜2004', 'それ以前']"
-                  label="あなたの在籍年"
-                />
-              </v-col>
-              <v-col cols="12">
                 <v-select
                   v-model="age_group"
                   :items="ageGroupList"
@@ -34,30 +47,16 @@
                   label="あなたの年代"
                 />
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" sm="6">
                 <v-select
-                  :items="playerFlagList"
-                  label="あなたの立場"
-                  item-text="playerType"
-                  item-value="playerFlag"
+                  v-model="enrollment_period"
+                  :items="enrollmentPeriodList"
+                  label="在籍年"
                 />
               </v-col>
               <v-card-title class="justify-space-between">
                 <span class="headline">チーム口コミ評価</span>
               </v-card-title>
-              <v-col cols="12">
-                <v-textarea
-                  v-model="general_post"
-                  autocomplete="総合評価"
-                  label="総合評価"
-                />
-                <div class="point-space">
-                  <span class="blue--text mr-2">
-                    ({{ general_point }})
-                  </span>
-                  <v-rating v-model="general_point" />
-                </div>
-              </v-col>
               <v-col cols="12">
                 <v-textarea
                   v-model="policy_post"
@@ -142,6 +141,19 @@
                   <v-rating v-model="cost_point" />
                 </div>
               </v-col>
+                <v-col cols="12">
+                <v-textarea
+                  v-model="general_post"
+                  autocomplete="総合評価"
+                  label="総合評価"
+                />
+                <div class="point-space">
+                  <span class="blue--text mr-2">
+                    ({{ general_point }})
+                  </span>
+                  <v-rating v-model="general_point" />
+                </div>
+              </v-col>
             </v-row>
           </v-container>
         </v-card-text>
@@ -176,7 +188,7 @@ export default {
   data () {
     return {
       gender_id: '',
-      enrollment_period: '2015〜2020',
+      enrollment_period: '在籍中',
       age_group: '',
       player_flag: '',
       general_post: '',
@@ -193,21 +205,27 @@ export default {
       event_point: 3,
       cost_post: '',
       cost_point: 3,
+      username: '',
 
       genderTypeList: [
         { gender: '男性', genderId: 1 },
         { gender: '女性', genderId: 2 }
       ],
+      enrollmentPeriodList: ['在籍中', '2015〜2020', '2010〜2014', '2005〜2009', '2000〜2004', 'それ以前'],
+
       ageGroupList: [
         { AgeGroupType: 'キッズ', AgeGroupId: 1 },
         { AgeGroupType: '小学生', AgeGroupId: 2 },
         { AgeGroupType: '中学生', AgeGroupId: 3 },
-        { AgeGroupType: '大学生', AgeGroupId: 4 },
-        { AgeGroupType: '社会人', AgeGroupId: 5 }
+        { AgeGroupType: '高校生', AgeGroupId: 4 },
+        { AgeGroupType: '大学・専門学生', AgeGroupId: 5 },
+        { AgeGroupType: '社会人', AgeGroupId: 6 }
       ],
       playerFlagList: [
         { playerType: 'プレーヤー', playerFlag: 1 },
-        { playerType: '保護者', playerFlag: 2 }
+        { playerType: '保護者', playerFlag: 2 },
+        { playerType: 'チーム関係者', playerFlag: 3 },
+        { playerType: 'その他', playerFlag: 4 }
       ]
     }
   },
@@ -217,7 +235,7 @@ export default {
         .dispatch('api/apiRequest', {
           api: 'reviewCreate',
           data: {
-            gender_id: this.gender_id,
+            gender: this.gender_id,
             enrollment_period: this.enrollment_period,
             age_group: this.age_group,
             player_flag: this.player_flag,
@@ -235,11 +253,31 @@ export default {
             event_point: this.event_point,
             cost_post: this.cost_post,
             cost_point: this.cost_point,
-            team_id: this.teamId
+            team_id: this.teamId,
+            username: this.username
           }
         })
         .then((response) => {
           if (response.status === 200) {
+            this.gender_id = ''
+            this.enrollment_period = ''
+            this.age_group = ''
+            this.player_flag = ''
+            this.general_post = ''
+            this.general_point = 3
+            this.policy_post = ''
+            this.policy_point = 3
+            this.organization_post = ''
+            this.organization_point = 3
+            this.activity_post = ''
+            this.activity_point = 3
+            this.environment_post = ''
+            this.environment_point = 3
+            this.event_post = ''
+            this.event_point = 3
+            this.cost_post = ''
+            this.cost_point = 3
+            this.username = ''
             this.closeModal()
           }
         })

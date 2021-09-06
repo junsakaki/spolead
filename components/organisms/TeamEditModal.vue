@@ -181,7 +181,8 @@ export default {
           { targetAgeType: '小学生', ageId: 2 },
           { targetAgeType: '中学生', ageId: 3 },
           { targetAgeType: '高校生', ageId: 4 },
-          { targetAgeType: '大学生', ageId: 5 },
+          { targetAgeType: '大学・専門学生', ageId: 5 },
+          { targetAgeType: '社会人', ageId: 6 },
       ]
     }
   },

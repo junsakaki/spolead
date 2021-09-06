@@ -1,8 +1,16 @@
 // localVer
+<<<<<<< HEAD
 const foundation = 'http://localhost:3000/v1'
 
 // productionVer
 // const foundation = process.env.FOUNDATION
+=======
+//const foundation = 'http://localhost:3000/v1'
+const foundation = 'http://develop01.spolead-sv.net/api/v1'
+
+// productionVer
+//const foundation = process.env.FOUNDATION
+>>>>>>> develop
 
 export default {
   // 都道府県取得外部API
@@ -16,10 +24,20 @@ export default {
     method: 'get'
   },
 
+  // アカウント登録
+  signup: {
+    url: foundation + '/users',
+    method: 'post'
+  },
   // ユーザーログイン
   login: {
     url: foundation + '/login',
     method: 'post'
+  },
+  // ユーザーログアウト
+  logout: {
+    url: foundation + '/logout',
+    method: 'delete'
   },
   // チーム一覧
   teamIndex: {

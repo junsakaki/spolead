@@ -157,7 +157,8 @@ export default {
         { targetAgeType: '小学生', ageId: 2 },
         { targetAgeType: '中学生', ageId: 3 },
         { targetAgeType: '高校生', ageId: 4 },
-        { targetAgeType: '大学生', ageId: 5 }
+        { targetAgeType: '大学・専門学生', ageId: 5 },
+        { targetAgeType: '社会人', ageId: 6 }
       ]
     }
   },
@@ -218,7 +219,8 @@ export default {
             sports_id: this.sports_id,
             team_type: this.team_type,
             target_age_type: this.target_age_type,
-            team_information: this.team_information
+            team_information: this.team_information,
+            user_id: localStorage.getItem('userId')
           }
         })
         .then((response) => {

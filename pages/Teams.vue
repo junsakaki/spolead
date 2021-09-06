@@ -6,12 +6,12 @@
   >
     <div class="page-header">
       チーム一覧
-      <div class="page-header-title">
-        <SearchForm @execSearch="execSearch" />
-      </div>
-      <common-button @click="showRegistTeamModal" button-color="primary">
+      <common-button @click="showRegistTeamModal" v-if="isLogin" button-color="primary">
         チームを登録する
       </common-button>
+    </div>
+    <div class="page-header-title">
+      <SearchForm :class="isMobile && 'SP'" @execSearch="execSearch" />
     </div>
     <v-flex
       v-for="team in teams"
@@ -22,12 +22,14 @@
       flex-wrap
       class="page-content"
     >
-      <div class="page-content-item">
+      <div :class="`page-content-item ${isMobile && 'SP'}`">
         <div class="page-content-item-header" style="display">
           {{ team.name }} ({{ team.prefecture }}{{ team.city }}{{ team.street_number }})
+          <v-chip color="primary" x-small>{{ teamTypeList[team.team_type] }}</v-chip>
+          <v-chip color="primary" x-small>{{ targetAgeList[team.target_age_type] }}</v-chip>
           <!-- <v-rating v-model="team.average_point" v-if="team.average_point" readonly /> -->
         </div>
-        <div class="page-content-item-main">
+        <div :class="`${isMobile && 'flex'} page-content-item-main`">
           <div class="page-content-item-list">
             <v-card class="d-inline-block mx-auto">
               <v-container>
@@ -44,21 +46,21 @@
             </v-card>
           </div>
           <div class="page-content-item-list">
-            <div class="page-content-item-lists">
+            <div v-if="team.average_point" class="page-content-item-lists">
               <span class="text--lighten-2 mr-1">
                 ({{ team.average_point }})
               </span>
-              <v-rating v-model="team.average_point" v-if="team.average_point" readonly />
+              <v-rating v-model="team.average_point" readonly />
             </div>
             <div class="page-content-item-lists">
-              {{ team.team_information }}
+              <p v-html="transformTextToHtml(team.team_information)" />
             </div>
-            <v-divider :inset="false" class="inner-divider"/>
+            <v-divider :inset="false" class="inner-divider" />
             <div class="page-content-item-lists grey--text">
               最新の口コミ評価({{ getLatestReview(team.reviews) ? new Date(getLatestReview(team.reviews).updated_at).toLocaleString() : 'まだ口コミがありません' }})
             </div>
             <div v-if="getLatestReview(team.reviews)" class="page-content-item-lists mx-6">
-              {{ getLatestReview(team.reviews).general_post }}
+              <p v-html="transformTextToHtml(getLatestReview(team.reviews).general_post)" />
             </div>
           </div>
         </div>
@@ -73,7 +75,7 @@
     <!-- <common-button button-size="large" button-color="primary" button-width="25vw">
       ユーザー登録
     </common-button> -->
-    <!-- <Pagination /> -->
+    <Pagination @execPagination="execPagination" :totalPages="totalPages" :page="page" />
     <team-regist-modal :dialog="registTeamModal" @registTeam="registTeam" />
   </v-layout>
 </template>
@@ -83,32 +85,45 @@ import { colors } from '~/assets/js/Colors.js'
 import CommonButton from '~/components/atoms/CommonButton.vue'
 import TeamRegistModal from '~/components/organisms/TeamRegistModal.vue'
 import SearchForm from '~/components/molecules/SearchForm.vue'
-// import Pagination from '~/components/molecules/Pagination.vue'
+import Pagination from '~/components/molecules/Pagination.vue'
+import transformTextToHtml from '~/pages/utils/transformTextToHtml'
 
 export default {
   components: {
     CommonButton,
     SearchForm,
-    TeamRegistModal
-    // Pagination
+    TeamRegistModal,
+    Pagination
   },
   data () {
     return {
       colors,
+      transformTextToHtml,
       valid: true,
       nickname: '',
       email: '',
       password: '',
       passwordConfirm: '',
       registTeamModal: false,
-      teams: []
+      teams: [],
+      searchWord: '',
+      page: 1,
+      totalPages: 15,
+      targetAgeList: [null, 'キッズ', '小学生', '中学生', '高校生', '大学・専門学生', '社会人'],
+      teamTypeList: [null, 'チーム', 'スクール'],
+      isMobile: this.$vuetify.breakpoint.smAndDown
+    }
+  },
+  computed: {
+    isLogin () {
+      return !!localStorage.getItem('userId')
     }
   },
   created () {
     this.getTeams()
   },
   methods: {
-    getTeams (searchWord) {
+    getTeams () {
       let params = {}
       // get Teams related to sportsId
       if (localStorage.getItem('sportsId')) {
@@ -121,8 +136,9 @@ export default {
           city_code: localStorage.getItem('cityCode')
         }
       }
-      params.search_word = searchWord
-      // params.page = page || 1
+
+      params.search_word = this.searchWord
+      params.page = this.page
 
       this.$store
         .dispatch('api/apiRequest', {
@@ -130,8 +146,11 @@ export default {
           params
         }).then((res) => {
           if (res.status === 200) {
-            this.teams = res.data
+            scrollTo(0, 0)
+            this.teams = res.data.teams
+            this.totalPages = res.data.meta
             console.log('this.teams  ', this.teams)
+            console.log('this.total_pages  ', this.totalPages)
           }
         })
     },
@@ -154,23 +173,31 @@ export default {
     },
     execSearch (searchWord) {
       console.log('searching by', searchWord)
-      this.getTeams(searchWord)
+      this.searchWord = searchWord
+      this.page = 1
+      this.getTeams()
     },
     getLatestReview (reviews) {
       let latestReviewDate = ''
       let latestReview = ''
-      if (reviews.length > 0) {
-        reviews.forEach((review) => {
-          const updatedAt = new Date(review.updated_at)
-          latestReviewDate = updatedAt
-          latestReview = review
-          if (review.updated_at > latestReviewDate) {
+      if (reviews) {
+        if (reviews.length > 0) {
+          reviews.forEach((review) => {
+            const updatedAt = new Date(review.updated_at)
             latestReviewDate = updatedAt
             latestReview = review
-          }
-        })
+            if (review.updated_at > latestReviewDate) {
+              latestReviewDate = updatedAt
+              latestReview = review
+            }
+          })
+        }
       }
       return latestReview === '' ? false : latestReview
+    },
+    execPagination (page) {
+      this.page = page
+      this.getTeams()
     }
   }
 }
@@ -201,5 +228,19 @@ export default {
 }
 .v-input {
   width: 25vw;
+}
+.search-field.SP {
+  width: 100%;
+}
+.flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.page-content-item {
+  width: 100%;
+}
+.page-content-item.SP {
+  width: fit-content;
 }
 </style>

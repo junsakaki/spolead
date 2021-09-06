@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="page-title">
-      ユーザー登録ページ
+      アカウント登録
     </div>
     <v-flex
       xs12
@@ -29,7 +29,7 @@
       >
         <v-text-field
           v-model="nickname"
-          :counter="10"
+          :counter="30"
           :rules="nameRules"
           label="ニックネーム"
           required
@@ -42,18 +42,20 @@
         />
         <v-text-field
           v-model="password"
+          :rules="passwordRules"
           label="パスワード"
           required
         />
         <v-text-field
           v-model="passwordConfirm"
+          :rules="passwordConfirmRules"
           label="パスワード（確認）"
           required
         />
       </v-form>
     </v-flex>
-    <common-button button-size="large" button-color="primary" button-width="25vw">
-      ユーザー登録
+    <common-button @click="signUp" button-size="large" button-color="primary" class="signup-button">
+      アカウント登録
     </common-button>
   </v-layout>
 </template>
@@ -75,12 +77,18 @@ export default {
       password: '',
       passwordConfirm: '',
       nameRules: [
-        v => !!v || 'Name is required',
-        v => (v && v.length <= 10) || 'Name must be less than 10 characters'
+        v => !!v || 'ニックネームは必須項目です。',
+        v => (v && v.length <= 30) || 'ニックネームは30文字が上限です。'
       ],
       emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
+        v => !!v || 'Emailは必須項目です。',
+        v => /.+@.+\..+/.test(v) || 'Emailの形式が正しくありません。'
+      ],
+      passwordRules: [
+        v => (v && v.length >= 5) || 'パスワードは6文字以上に設定してください。'
+      ],
+      passwordConfirmRules: [
+        v => (v === this.password) || 'パスワードが一致しません。'
       ]
     }
   },
@@ -89,13 +97,36 @@ export default {
       this.$router.push('/login')
     },
     validate () {
-      this.$refs.form.validate()
+      return this.$refs.form.validate()
     },
     reset () {
       this.$refs.form.reset()
     },
     resetValidation () {
       this.$refs.form.resetValidation()
+    },
+    signUp () {
+      if (this.validate()) {
+        this.$store
+          .dispatch('api/apiRequest', {
+            api: 'signup',
+            data: {
+              nickname: this.nickname,
+              email: this.email,
+              password: this.password
+            }
+          }).then((res) => {
+            if (res.status === 200) {
+              localStorage.setItem('token', res.data.access_token)
+              localStorage.setItem('userId', res.data.user_id)
+              localStorage.setItem('loginDateTime', new Date())
+              // location.replace('http://localhost:8000/')
+              //location.replace('https://spolead.com/')
+              location.replace('http://develop01.spolead-sv.net/')
+              console.log('token →', res.data.access_token)
+            }
+          })
+      }
     }
   }
 }
@@ -117,10 +148,22 @@ export default {
   align-items: center;
   justify-content: center;
 }
+.SP .page-title {
+  font-size: 32px;
+}
 .page-content {
   margin: 32px;
 }
 .v-input {
   width: 25vw;
+}
+.SP .v-input {
+  width: 75vw;
+}
+.signup-button {
+  width: 25vw;
+}
+.SP .signup-button {
+  width: 75vw;
 }
 </style>

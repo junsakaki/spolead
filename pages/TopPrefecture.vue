@@ -6,9 +6,6 @@
   >
     <div class="page-header">
       <div class="page-header-title">
-        総合スポーツチーム口コミ情報サイト
-      </div>
-      <div class="page-header-title">
         <common-button @click="topSports" button-size="large" button-color="primary">
           スポーツから探す
         </common-button>
@@ -17,8 +14,11 @@
         </common-button>
       </div>
     </div>
+    <div class="page-title">
+      総合スポーツチーム口コミ情報サイト
+    </div>
     <v-img
-      :src="require('~/assets/images/spolead-logo3.png')"
+      :src="require('~/assets/images/spolead-logo4.png')"
       :width="250"
       :aspect-ratio="16/6"
     ></v-img>
@@ -36,7 +36,7 @@
       <v-col
         v-for="card in cards"
         :key="card.title"
-        :cols="card.flex"
+        cols="3"
         @click="goPrefectureMode(card.id)"
         class="sports"
       >
@@ -210,7 +210,7 @@ export default {
       this.$router.push('/login')
     },
     topSports () {
-      this.$router.push('/top')
+      this.$router.push('/')
     },
     showTeamsRelatedToCity (cityCode) {
       this.$router.push({ name: 'Teams', params: { cityCode } })
@@ -290,17 +290,29 @@ export default {
 @import '~/assets/scss/page.scss';
 
 .page-header {
-  @include top-page-header
+  @include top-page-header;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 .page-title {
   width: 100%;
-  height: 13vh;
-  font-size: 56px;
+  font-size: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .page-content {
   @include top-page-content
+}
+.SP .page-content {
+  margin: 0;
+  .sports {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+.logo {
+  margin-top: 20px;
 }
 </style>

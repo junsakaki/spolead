@@ -12,7 +12,7 @@
         <common-button @click="showRegistReviewsModal" button-color="primary">
           口コミ投稿する
         </common-button>
-        <common-button @click="showEditTeamModal" button-color="primary">
+        <common-button @click="showEditTeamModal" v-if="isTeamOwner" button-color="primary">
           チーム編集
         </common-button>
       </div>
@@ -51,8 +51,8 @@
 
         <v-tabs-items v-model="tab">
           <v-tab-item>
-            <div class="page-content-item-main">
-              <div class="page-content-item-list">
+            <div :class="`page-content-item-main ${isMobile && 'SP'}`">
+              <div :class="`page-content-item-list ${isMobile && 'SP'}`">
                 <v-card class="d-inline-block mx-auto">
                   <v-container>
                     <v-row justify="space-between">
@@ -72,7 +72,7 @@
                   <v-row justify="space-between">
                     <v-col cols="auto">
                       <!-- <div class="grey--text">チームトップ情報</div> -->
-                      <p>{{ team.team_information }}</p>
+                      <p v-html="transformTextToHtml(team.team_information)" />
                     </v-col>
                   </v-row>
                 </v-container>
@@ -146,6 +146,7 @@ import CommonButton from '~/components/atoms/CommonButton.vue'
 import TeamEditModal from '~/components/organisms/TeamEditModal.vue'
 import ReviewsRegistModal from '~/components/organisms/ReviewsRegistModal.vue'
 import ReviewContent from '~/components/organisms/ReviewContent.vue'
+import transformTextToHtml from '~/pages/utils/transformTextToHtml'
 
 export default {
   components: {
@@ -157,6 +158,7 @@ export default {
   data () {
     return {
       colors,
+      transformTextToHtml,
       tab: null,
       rating: 3,
       valid: true,
@@ -169,7 +171,8 @@ export default {
       team: {},
       reviewsList: [],
       sports_name: '',
-      showMoreInfo: true
+      showMoreInfo: true,
+      isMobile: this.$vuetify.breakpoint.smAndDown
     }
   },
   computed: {
@@ -188,6 +191,12 @@ export default {
         }
       })
       return unreadCount
+    },
+    isTeamOwner () {
+      // TODO: need to get from access_token
+      console.log('teams user_id', this.team.user_id)
+      console.log('storage user_id', localStorage.getItem('userId'))
+      return String(this.team.user_id) === localStorage.getItem('userId')
     }
     // computed avarage point but unnecessary this point.
     // avarageGeneralReviewPoint () {
@@ -214,7 +223,7 @@ export default {
         }).then((res) => {
           console.log(res)
           if (res.status === 200) {
-            this.team = res.data
+            this.team = res.data.team
             console.log(this.team)
             this.whichSports()
           }
@@ -230,7 +239,7 @@ export default {
         }).then((res) => {
           console.log(res)
           if (res.status === 200) {
-            this.reviewsList = res.data
+            this.reviewsList = res.data.reviews
           }
         })
     },
@@ -300,14 +309,9 @@ export default {
 @import '~/assets/scss/page.scss';
 .page-header {
   @include default-page-header;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  &-sub {
-    .common-button {
-      width: 10vw;
-    }
-  }
+}
+.page-header-sub {
+  text-align: right;
 }
 .page-content {
   @include default-page-content;
@@ -322,5 +326,12 @@ export default {
   .tabs {
     margin: 24px 0px;
   }
+}
+.page-content-item-main.SP {
+  flex-direction: column;
+}
+.page-content-item-list.SP {
+  display: flex;
+  justify-content: center;
 }
 </style>
