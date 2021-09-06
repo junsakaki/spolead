@@ -96,8 +96,8 @@ export default {
               localStorage.setItem('loginDateTime', new Date())
               console.log('token →', res.data.access_token)
               // location.replace('http://localhost:8000/')
-              //location.replace('https://spolead.com/')
-              location.replace('http://develop01.spolead-sv.net/')
+              location.replace('https://spolead.com/')
+              //location.replace('http://develop01.spolead-sv.net/')
             }
           }).catch((err) => {
             console.log('ERROR', err)
