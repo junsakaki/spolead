@@ -10,7 +10,9 @@
           <v-icon>mdi-chevron-right</v-icon>
         </template>
       </v-breadcrumbs>
-      <SearchForm placeholder="検索(チーム名、都道府県、市区町村)" @execSearch="execSearch" />
+      <div class="mb-4">
+        <SearchForms @execSearch="execSearch" />
+      </div>
       <v-flex
         v-for="team in teams"
         :key="team.id"
@@ -74,16 +76,16 @@
 <script>
 import queryString from 'query-string'
 import { colors } from '~/assets/js/Colors.js'
-import SearchForm from '~/components/shared/molecules/SearchForm.vue'
 import Pagination from '~/components/shared/molecules/Pagination.vue'
+import SearchForms from '~/components/teams/organisms/SearchForms.vue'
 import TeamsSkelton from '~/components/teams/organisms/TeamsSkelton.vue'
 import transformTextToHtml from '~/utils/transformTextToHtml'
 
 export default {
   components: {
-    SearchForm,
     Pagination,
-    TeamsSkelton
+    TeamsSkelton,
+    SearchForms
   },
   data () {
     return {
@@ -173,10 +175,12 @@ export default {
       localStorage.setItem('teamId', teamId)
       this.$router.push({ path: `teams/${teamId}`, query: { ...this.$route.query, page: this.page } })
     },
-    execSearch (searchWord) {
-      this.searchWord = searchWord
+    execSearch (search) {
+      this.searchWord = search.searchWord
+      // TODO: 他の項目もセットする
       this.page = 1
       this.getTeams()
+      this.$router.replace(`/teams?sportsId=${search.sportsId}&searchWord=${search.searchWord}&teamType=${search.teamType}&targetAgeType=${search.targetAgeType}`)
     },
     getLatestReview (reviews) {
       let latestReviewDate = ''
