@@ -26,12 +26,6 @@
         class="page-content"
       >
         <div class="page-content-item">
-          <div :class="`page-content-item-header ${$vuetify.breakpoint.smAndDown && 'SP'}`">
-            <div>活動エリア：{{ team.prefecture }} {{ team.city }}</div>
-            <div>ジャンル：{{ getSportsName() }}</div>
-            <div>対象: {{ getTargetAgeType(team.target_age_type) }}</div>
-            <div>形態: {{ getTeamType(team.team_type) }}</div>
-          </div>
           <v-tabs
             v-model="tab"
             fixed-tabs
@@ -45,8 +39,14 @@
             <v-tab id="reviews" @change="changeTab(1)">
               口コミ
             </v-tab>
-            <v-tab @change="changeTab(2)">
-              アクセス
+            <v-tab id="careers" @change="changeTab(2)">
+              進路実績
+            </v-tab>
+            <v-tab id="celebrities" @change="changeTab(3)">
+              有名人
+            </v-tab>
+            <v-tab id="information" @change="changeTab(4)">
+              基本情報
             </v-tab>
           </v-tabs>
 
@@ -71,12 +71,12 @@
               </div>
             </v-tab-item>
             <v-tab-item>
-              <button class="review-post-button" @click="showRegistReviewsModal">
+              <button class="post-button" @click="showRegistReviewsModal">
                 + 口コミを投稿する
               </button>
               <!-- display reviews as much as review count -->
-              <div v-if="reviewsList.length > 0">
-                <div v-for="review in reviewsList" :key="review.id">
+              <div v-if="team.reviews && team.reviews.length > 0">
+                <div v-for="review in team.reviews" :key="review.id">
                   <review-content :review="review" />
                 </div>
               </div>
@@ -87,8 +87,57 @@
               </div>
             </v-tab-item>
             <v-tab-item>
-              <div class="address">
-                {{ team.prefecture }}{{ team.city }}{{ team.street_number }}
+              <button class="post-button" @click="showRegistCareersModal">
+                + 進路実績を投稿する
+              </button>
+              <div v-if="team.careers && team.careers.length > 0">
+                <div v-for="career in team.careers" :key="career.id">
+                  <career-content :career="career" />
+                </div>
+              </div>
+              <div v-else>
+                <div class="grey--text text-center">
+                  まだ進路実績に関する投稿がありません
+                </div>
+              </div>
+            </v-tab-item>
+            <v-tab-item>
+              <button class="post-button" @click="showRegistCelebritiesModal">
+                + 有名人を投稿する
+              </button>
+              <div v-if="team.celebrities && team.celebrities.length > 0">
+                <div v-for="celebrity in team.celebrities" :key="celebrity.id">
+                  <celebrity-content :celebrity="celebrity" />
+                </div>
+              </div>
+              <div v-else>
+                <div class="grey--text text-center">
+                  まだ有名人に関する投稿がありません
+                </div>
+              </div>
+            </v-tab-item>
+            <v-tab-item>
+              <div class="information">
+                <div class="information-row">
+                  <div>チーム・スクール名</div>
+                  <div>{{ team.name }}</div>
+                </div>
+                <div class="information-row">
+                  <div>スポーツジャンル</div>
+                  <div>{{ getSportsName() }}</div>
+                </div>
+                <div class="information-row">
+                  <div>所在地・活動場所等</div>
+                  <div>{{ team.prefecture }}{{ team.city }}{{ team.street_number }}</div>
+                </div>
+                <div class="information-row">
+                  <div>運営形式</div>
+                  <div>{{ getTargetAgeType(team.target_age_type) }} / {{ getTeamType(team.team_type) }}</div>
+                </div>
+                <div class="information-row">
+                  <div>ホームページ</div>
+                  <div>{{ team.url }}</div>
+                </div>
               </div>
               <iframe
                 :src="googleMap"
@@ -116,7 +165,19 @@
         v-if="registReviewsModal"
         :dialog="registReviewsModal"
         :team-id="team.id"
-        @registReview="registReview"
+        @closeModal="closeModal"
+      />
+      <careers-regist-modal
+        v-if="registCareersModal"
+        :dialog="registCareersModal"
+        :team-id="team.id"
+        @closeModal="closeModal"
+      />
+      <celebrities-regist-modal
+        v-if="registCelebritiesModal"
+        :dialog="registCelebritiesModal"
+        :team-id="team.id"
+        @closeModal="closeModal"
       />
     </div>
     <div v-else class="skelton-area">
@@ -131,7 +192,11 @@ import queryString from 'query-string'
 import { colors } from '~/assets/js/Colors.js'
 import TeamEditModal from '~/components/teams/organisms/TeamEditModal.vue'
 import ReviewsRegistModal from '~/components/teams/organisms/ReviewsRegistModal.vue'
+import CareersRegistModal from '~/components/teams/organisms/CareersRegistModal.vue'
+import CelebritiesRegistModal from '~/components/teams/organisms/CelebritiesRegistModal.vue'
 import ReviewContent from '~/components/teams/organisms/ReviewContent.vue'
+import CareerContent from '~/components/teams/organisms/CareerContent.vue'
+import CelebrityContent from '~/components/teams/organisms/CelebrityContent.vue'
 import TeamDetailSkelton from '~/components/teams/organisms/TeamDetailSkelton.vue'
 import transformTextToHtml from '~/utils/transformTextToHtml'
 
@@ -139,7 +204,11 @@ export default {
   components: {
     TeamEditModal,
     ReviewsRegistModal,
+    CareersRegistModal,
+    CelebritiesRegistModal,
     ReviewContent,
+    CareerContent,
+    CelebrityContent,
     TeamDetailSkelton
   },
   data () {
@@ -155,8 +224,9 @@ export default {
       passwordConfirm: '',
       editTeamModal: false,
       registReviewsModal: false,
+      registCelebritiesModal: false,
+      registCareersModal: false,
       team: {},
-      reviewsList: [],
       sports_name: '',
       showMoreInfo: true,
       isMobile: this.$vuetify.breakpoint.smAndDown,
@@ -202,7 +272,6 @@ export default {
   created () {
     const { prefCode, cityCode } = this.$route.query
     this.getTeamDetail()
-    this.getReviews()
     this.getCityData({ prefCode, cityCode })
   },
   methods: {
@@ -218,25 +287,17 @@ export default {
         }).then((res) => {
           this.isLoading = false
           if (res.status === 200) {
-            this.team = res.data.team
+            // TODO: APIのレスポンスにcareersとcelobritiesが追加されたら以下のデータ改変は戻す
+            this.team = {
+              ...res.data.team,
+              careers: [{ id: 1, content: '進路実績テスト1' }, { id: 2, content: '進路実績テスト2' }],
+              celebrities: [{ id: 1, content: '有名人テスト1' }, { id: 2, content: '有名人テスト2' }]
+            }
           }
           this.pageTitle = this.getPageTitle({ isBreadcrumbs: false })
         }).catch(() => {
           this.isLoading = false
           this.isError = true
-        })
-    },
-    getReviews () {
-      this.$store
-        .dispatch('api/apiRequest', {
-          api: 'reviewIndex',
-          params: {
-            team_id: this.$route.params.id
-          }
-        }).then((res) => {
-          if (res.status === 200) {
-            this.reviewsList = res.data.reviews
-          }
         })
     },
     getPageTitle ({ isBreadcrumbs }) {
@@ -254,8 +315,13 @@ export default {
     showRegistReviewsModal () {
       this.registReviewsModal = true
     },
+    showRegistCareersModal () {
+      this.registCareersModal = true
+    },
+    showRegistCelebritiesModal () {
+      this.registCelebritiesModal = true
+    },
     registReview () {
-      this.getReviews()
       this.closeModal()
     },
     teamEdit () {
@@ -265,6 +331,8 @@ export default {
     closeModal () {
       this.editTeamModal = false
       this.registReviewsModal = false
+      this.registCelebritiesModal = false
+      this.registCareersModal = false
     },
     getSportsName () {
       return this.$SPORTS.find(item => item.id === this.team.sports_id).title ?? ''
@@ -394,7 +462,7 @@ export default {
   width: 100%;
   text-align: center;
 }
-.review-post-button {
+.post-button {
   margin-bottom: 12px;
   border: dashed 2px #0000008a;
   padding: 12px 24px;
@@ -404,7 +472,15 @@ export default {
     opacity: 0.8;
   }
 }
-.address {
+.information {
   margin-bottom: 12px;
+  .information-row {
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    * {
+      border: solid 1px #00000026;
+      padding: 4px;
+    }
+  }
 }
 </style>

@@ -283,7 +283,7 @@ export default {
         })
     },
     closeModal () {
-      this.$emit('registReview')
+      this.$emit('closeModal')
     }
   }
 }

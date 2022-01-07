@@ -117,5 +117,25 @@ export default {
   reportCreate: {
     url: foundation + '/bbs/reports',
     method: 'post'
+  },
+  // 進路実績作成（投稿）
+  careerCreate: {
+    url: foundation + '/careers',
+    method: 'post'
+  },
+  // 進路実績一覧
+  careerIndex: {
+    url: foundation + '/careers',
+    method: 'get'
+  },
+  // 有名人作成（投稿）
+  celebrityCreate: {
+    url: foundation + '/celebrities',
+    method: 'post'
+  },
+  // 有名人一覧
+  celebrityIndex: {
+    url: foundation + '/celebrities',
+    method: 'get'
   }
 }

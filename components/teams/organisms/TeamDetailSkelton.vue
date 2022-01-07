@@ -21,9 +21,11 @@
       </div>
       <div class="skelton-teams-body mt-4">
         <div class="d-flex justify-space-between">
-          <v-skeleton-loader type="image" width="33%" height="40px" />
-          <v-skeleton-loader type="image" width="33%" height="40px" />
-          <v-skeleton-loader type="image" width="33%" height="40px" />
+          <v-skeleton-loader type="image" width="calc(20% - 4px)" height="40px" />
+          <v-skeleton-loader type="image" width="calc(20% - 4px)" height="40px" />
+          <v-skeleton-loader type="image" width="calc(20% - 4px)" height="40px" />
+          <v-skeleton-loader type="image" width="calc(20% - 4px)" height="40px" />
+          <v-skeleton-loader type="image" width="calc(20% - 4px)" height="40px" />
         </div>
         <v-sheet
           color="grey lighten-4"
@@ -59,9 +61,11 @@
       </div>
       <div class="skelton-teams-body mt-4">
         <div class="d-flex justify-space-between">
-          <v-skeleton-loader type="image" width="33%" height="40px" />
-          <v-skeleton-loader type="image" width="33%" height="40px" />
-          <v-skeleton-loader type="image" width="33%" height="40px" />
+          <v-skeleton-loader type="image" width="calc(20% - 4px)" height="40px" />
+          <v-skeleton-loader type="image" width="calc(20% - 4px)" height="40px" />
+          <v-skeleton-loader type="image" width="calc(20% - 4px)" height="40px" />
+          <v-skeleton-loader type="image" width="calc(20% - 4px)" height="40px" />
+          <v-skeleton-loader type="image" width="calc(20% - 4px)" height="40px" />
         </div>
         <v-sheet
           color="grey lighten-4"
