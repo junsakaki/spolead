@@ -5,7 +5,8 @@ const SPORTS = [
   { id: 4, title: 'バレーボール', src: require('~/assets/images/volleyball.jpeg'), icon_src: require('~/assets/images/icon/volleyball.png') },
   { id: 5, title: 'ダンス', src: require('~/assets/images/dance.jpeg'), icon_src: require('~/assets/images/icon/dance.png') },
   { id: 6, title: 'ラグビー', src: require('~/assets/images/rugby.jpeg'), icon_src: require('~/assets/images/icon/rugby.png') },
-  { id: 7, title: '水泳', src: require('~/assets/images/swimming.jpeg'), icon_src: require('~/assets/images/icon/swimming.png') }
+  { id: 7, title: '水泳', src: require('~/assets/images/swimming.jpeg'), icon_src: require('~/assets/images/icon/swimming.png') },
+  { id: 999, title: 'その他' }
 ]
 
 const AREA = [
