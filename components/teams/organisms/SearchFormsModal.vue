@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-dialog :value="dialog" persistent max-width="600px">
+    <v-dialog :value="dialog" persistent max-width="600px" class="search-form">
       <v-card class="pa-4">
         <v-card-text>
           <div class="mb-5">
@@ -27,7 +27,80 @@
           <v-divider class="mb-5" />
           <div class="mb-5">
             <div>エリア</div>
-            <div>????</div>
+            <v-radio-group
+              v-model="areaSelectionsType"
+              row
+              class="ma-0"
+            >
+              <v-radio
+                v-for="areaSelection in areaSelections"
+                :key="areaSelection.id"
+                :label="areaSelection.name"
+                :value="areaSelection.type"
+                @click="onSelectAreaSelectionsType(areaSelection.type)"
+              />
+            </v-radio-group>
+            <div v-if="areaSelectionsType === 'specify'" class="body-1 ml-2">
+              <div @click="resetSelectedArea()">
+                選択しない
+              </div>
+              <div v-for="area in $AREA" :key="area.id">
+                <input
+                  :id="`selectedAreaCode-${area.id}`"
+                  v-model="selectedAreaCode"
+                  name="selectedAreaCode"
+                  type="radio"
+                  :value="area.id"
+                  style="display: none;"
+                >
+                <label :for="`selectedAreaCode-${area.id}`">{{ area.title }}</label>
+                <div v-if="area.id === selectedAreaCode" class="ml-4">
+                  <div v-for="prefecture in area.prefectures" :key="prefecture.id" class="mr-2">
+                    <input
+                      :id="`selectedPrefectureCode-${prefecture.id}`"
+                      v-model="selectedPrefectureCode"
+                      name="selectedPrefectureCode"
+                      type="radio"
+                      :value="prefecture.id"
+                      style="display: none;"
+                    >
+                    <label :for="`selectedPrefectureCode-${prefecture.id}`">{{ prefecture.title }}</label>
+                    <div v-if="prefecture.id === selectedPrefectureCode" class="ml-4">
+                      <div :class="selectedCityCode === null && 'font-weight-bold'" @click="() => selectedCityCode = null">
+                        <input
+                          id="selectedCityCode-all"
+                          v-model="selectedCityCode"
+                          name="selectedCityCode"
+                          type="radio"
+                          :value="null"
+                          style="display: none;"
+                        >
+                        <label for="selectedCityCode-all">{{ prefecture.title }}全域</label>
+                      </div>
+                      <div v-for="city in cities" :key="city.id" :class="selectedCityCode === city.cityCode && 'font-weight-bold'">
+                        <input
+                          :id="`selectedCityCode-${city.cityCode}`"
+                          v-model="selectedCityCode"
+                          name="selectedCityCode"
+                          type="radio"
+                          :value="city.cityCode"
+                          style="display: none;"
+                        >
+                        <label :for="`selectedCityCode-${city.cityCode}`">{{ city.cityName }}</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-if="areaSelectionsType === 'current'" class="body-1 ml-2">
+              <div v-if="isFetchingCurrentPosition">
+                位置情報を取得中です...
+              </div>
+              <div v-else>
+                現在地(緯度: {{ search.area.latitude }}, 経度: {{ search.area.longitude }})に近いエリアから検索します。
+              </div>
+            </div>
           </div>
           <v-divider class="mb-5" />
           <div>
@@ -63,7 +136,7 @@
           <v-btn color="blue darken-1" text @click="closeModal">
             やめる
           </v-btn>
-          <v-btn color="blue darken-1" text @click="execSearch">
+          <v-btn color="blue darken-1" text :disabled="isFetchingCurrentPosition" @click="execSearch">
             検索する
           </v-btn>
         </v-card-actions>
@@ -86,8 +159,29 @@ export default {
         searchWord: '',
         targetAgeType: [],
         teamType: [],
-        sportsId: 1
-      }
+        sportsId: 1,
+        area: {
+          latitude: null,
+          longitude: null,
+          cityCodes: []
+        }
+      },
+      areaSelectionsType: 'specify',
+      areaSelections: [{ id: 1, type: 'specify', name: '都道府県から選択する' }, { id: 2, type: 'current', name: '現在地から検索する' }],
+      isFetchingCurrentPosition: false,
+      selectedAreaCode: null,
+      selectedPrefectureCode: null,
+      cities: [],
+      selectedCityCode: null
+    }
+  },
+  watch: {
+    selectedPrefectureCode () {
+      this.cities = []
+      this.getCitySelect()
+    },
+    areaSelectionsType () {
+      this.resetSelectedArea()
     }
   },
   created () {
@@ -99,15 +193,80 @@ export default {
         searchWord: this.$route.query.searchWord ?? '',
         targetAgeType: this.$route.query.targetAgeType ? this.$route.query.targetAgeType.split(',').map(Number) : [],
         teamType: this.$route.query.teamType ? this.$route.query.teamType.split(',').map(Number) : [],
-        sportsId: Number(this.$route.query.sportsId) ?? 999
+        sportsId: Number(this.$route.query.sportsId) ?? 999,
+        area: {
+          latitude: this.$route.query.latitude ?? null,
+          longitude: this.$route.query.longitude ?? null,
+          cityCodes: null // TODO: cityCodeかprefCodeかで変わるべき
+        }
       }
     },
     execSearch () {
+      if (this.areaSelectionsType === 'specify') {
+        const cityCodes = this.selectedCityCode ? [this.selectedCityCode] : this.selectedPrefectureCode ? this.cities.map(city => Number(city.cityCode)) : null
+        this.search = {
+          ...this.search,
+          area: {
+            latitude: null,
+            longitude: null,
+            cityCodes
+          }
+        }
+      }
       this.closeModal()
       this.$emit('execSearch', this.search)
     },
     closeModal () {
       this.$emit('closeModal')
+    },
+    onSelectAreaSelectionsType (type) {
+      if (type === 'current') {
+        this.isFetchingCurrentPosition = true
+        navigator.geolocation.getCurrentPosition((position) => {
+          this.search = {
+            ...this.search,
+            area: {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              cityCodes: null
+            }
+          }
+          this.isFetchingCurrentPosition = false
+        }, () => {
+          this.isFetchingCurrentPosition = false
+          this.areaSelectionsType = 'specify'
+        })
+      }
+      if (type === 'specify') {
+        this.search = {
+          ...this.search,
+          area: {
+            latitude: null,
+            longitude: null,
+            cityCodes: []
+          }
+        }
+      }
+    },
+    getCitySelect () {
+      this.$store
+        .dispatch('api/apiRequest', {
+          api: 'getCityApi',
+          params: {
+            prefCode: this.selectedPrefectureCode
+          }
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            this.cities = response.data.result
+          }
+        })
+    },
+    resetSelectedArea () {
+      this.selectedAreaCode = null
+      this.selectedPrefectureCode = null
+      this.cities = []
+      this.selectedCityCode = null
     }
   }
 }
