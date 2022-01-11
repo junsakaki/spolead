@@ -10,14 +10,21 @@
         >
       </router-link>
       <div class="icon-button-wrapper SP">
-        <a v-if="token" class="icon-button" @click="logOut">
-          <v-icon small>
-            mdi-lock-open
-          </v-icon>
-          <p class="icon-button-link">
-            ログアウト
-          </p>
-        </a>
+        <router-link v-if="token" class="icon-button" to="/settings">
+          <v-btn
+            class="mx-2"
+            fab
+            dark
+            x-small
+            depressed
+            outlined
+            color="grey lighten-1"
+          >
+            <v-icon dark>
+              mdi-account
+            </v-icon>
+          </v-btn>
+        </router-link>
         <router-link v-else class="icon-button" to="/login">
           <v-icon small>
             mdi-lock
@@ -64,14 +71,23 @@
             </router-link>
           </div>
         </button>
-        <a v-if="token" class="link icon-button" @click="logOut">
-          <v-icon small>
-            mdi-lock-open
-          </v-icon>
-          <p class="icon-button-link">
-            ログアウト
-          </p>
-        </a>
+        <div v-if="token" class="links">
+          <router-link class="link icon-button" to="/settings">
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              small
+              depressed
+              outlined
+              color="grey lighten-1"
+            >
+              <v-icon dark>
+                mdi-account
+              </v-icon>
+            </v-btn>
+          </router-link>
+        </div>
         <router-link v-if="!token" to="/signup" class="link icon-button">
           <v-icon small>
             mdi-account
@@ -104,31 +120,6 @@ export default {
   data () {
     return {
       isMobile: this.$vuetify.breakpoint.smAndDown
-    }
-  },
-  methods: {
-    logOut () {
-      // only remove localStorage
-
-      // this.$store
-      //   .dispatch('api/apiRequest', {
-      //     api: 'login',
-      //     data: {
-      //       email: this.email,
-      //       password: this.password
-      //     }
-      //   }).then((res) => {
-      //     if (res.status === 200) {
-      localStorage.removeItem('token')
-      localStorage.removeItem('userId')
-      localStorage.removeItem('loginDateTime')
-      this.$router.push('/')
-      // due to local development
-      // location.replace('http://localhost:8000/')
-      location.replace('https://spoleader.com/')
-      // location.replace('http://develop01.spolead-sv.net')
-      //   }
-      // })
     }
   }
 }
