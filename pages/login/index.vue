@@ -38,6 +38,9 @@
           :rules="passwordRules"
           label="パスワード"
           required
+          :append-icon="passwordDisplay ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="passwordDisplay ? 'text' : 'password'"
+          @click:append="passwordDisplay = !passwordDisplay"
         />
       </v-form>
       <common-button button-size="large" button-color="primary" class="login-button" @click="login">
@@ -70,6 +73,7 @@ export default {
       valid: true,
       email: '',
       password: '',
+      passwordDisplay: false,
       emailRules: [
         v => !!v || 'Emailは必須項目です。',
         v => /.+@.+\..+/.test(v) || 'Emailの形式が正しくありません。'

@@ -45,12 +45,18 @@
           :rules="passwordRules"
           label="パスワード"
           required
+          :append-icon="passwordDisplay.new ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="passwordDisplay.new ? 'text' : 'password'"
+          @click:append="passwordDisplay.new = !passwordDisplay.new"
         />
         <v-text-field
           v-model="passwordConfirm"
           :rules="passwordConfirmRules"
           label="パスワード（確認）"
           required
+          :append-icon="passwordDisplay.confirm ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="passwordDisplay.confirm ? 'text' : 'password'"
+          @click:append="passwordDisplay.confirm = !passwordDisplay.confirm"
         />
       </v-form>
       <common-button button-size="large" button-color="primary" class="signup-button" @click="signUp">
@@ -82,6 +88,10 @@ export default {
       email: '',
       password: '',
       passwordConfirm: '',
+      passwordDisplay: {
+        new: false,
+        confirm: false
+      },
       nameRules: [
         v => !!v || 'ニックネームは必須項目です。',
         v => (v && v.length <= 30) || 'ニックネームは30文字が上限です。'

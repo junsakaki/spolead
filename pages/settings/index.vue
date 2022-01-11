@@ -23,15 +23,41 @@
             <div :class="`d-flex align-center caption ${!$vuetify.breakpoint.smAndDown && 'pb-4'}`">
               現在のパスワード
             </div>
-            <v-text-field v-model="password.current" required placeholder="現在のパスワードを入力" class="ma-0 pa-0" />
+            <v-text-field
+              v-model="password.current"
+              required
+              placeholder="現在のパスワードを入力"
+              class="ma-0 pa-0"
+              :append-icon="passwordDisplay.current ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="passwordDisplay.current ? 'text' : 'password'"
+              @click:append="passwordDisplay.current = !passwordDisplay.current"
+            />
             <div :class="`d-flex align-center caption ${!$vuetify.breakpoint.smAndDown && 'pb-4'}`">
               新しいパスワード
             </div>
-            <v-text-field v-model="password.new" :rules="passwordRules" required placeholder="新しいパスワードを入力" class="ma-0 pa-0" />
+            <v-text-field
+              v-model="password.new"
+              :rules="passwordRules"
+              required
+              placeholder="新しいパスワードを入力"
+              class="ma-0 pa-0"
+              :append-icon="passwordDisplay.new ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="passwordDisplay.new ? 'text' : 'password'"
+              @click:append="passwordDisplay.new = !passwordDisplay.new"
+            />
             <div :class="`d-flex align-center caption ${!$vuetify.breakpoint.smAndDown && 'pb-4'}`">
               新しいパスワード（確認用）
             </div>
-            <v-text-field v-model="password.confirm" :rules="passwordConfirmRules" required placeholder="新しいパスワードを入力（確認用）" class="ma-0 pa-0" />
+            <v-text-field
+              v-model="password.confirm"
+              :rules="passwordConfirmRules"
+              required
+              placeholder="新しいパスワードを入力（確認用）"
+              class="ma-0 pa-0"
+              :append-icon="passwordDisplay.confirm ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="passwordDisplay.confirm ? 'text' : 'password'"
+              @click:append="passwordDisplay.confirm = !passwordDisplay.confirm"
+            />
           </v-form>
           <div class="text-center">
             <v-btn color="primary" text class="mt-2" @click="updatePassword">
@@ -69,6 +95,11 @@ export default {
         current: '',
         new: '',
         confirm: ''
+      },
+      passwordDisplay: {
+        current: false,
+        new: false,
+        confirm: false
       },
       passwordRules: [
         v => (v && v.length >= 5) || 'パスワードは6文字以上に設定してください。'
