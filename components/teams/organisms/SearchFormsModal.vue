@@ -104,7 +104,7 @@
           </div>
           <v-divider class="mb-5" />
           <div>
-            <div>運営形式</div>
+            <div>運営団体</div>
             <v-flex d-flex flex-wrap>
               <v-checkbox
                 v-for="item in $TEAM_TYPE"
@@ -118,7 +118,7 @@
           </div>
           <v-divider class="mb-5" />
           <div>
-            <div>対象年代</div>
+            <div>対象層</div>
             <v-flex d-flex flex-wrap>
               <v-checkbox
                 v-for="item in $TARGET_AGE"

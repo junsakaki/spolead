@@ -78,22 +78,30 @@
               />
             </v-col>
             <v-col cols="12" sm="6">
-              <v-select
-                v-model="team_type"
-                :items="teamTypeList"
-                item-text="teamType"
-                item-value="typeId"
-                label="運営団体"
-              />
+              <div>運営団体</div>
+              <v-flex d-flex flex-wrap>
+                <v-checkbox
+                  v-for="item in $TEAM_TYPE"
+                  :key="item.typeId"
+                  v-model="team_type"
+                  :label="item.teamType"
+                  :value="item.typeId"
+                  class="ma-0"
+                />
+              </v-flex>
             </v-col>
             <v-col cols="12" sm="6">
-              <v-select
-                v-model="target_age_type"
-                :items="targetAgeList"
-                item-text="targetAgeType"
-                item-value="ageId"
-                label="対象層"
-              />
+              <div>対象層</div>
+              <v-flex d-flex flex-wrap>
+                <v-checkbox
+                  v-for="item in $TARGET_AGE"
+                  :key="item.id"
+                  v-model="target_age_type"
+                  :label="item.targetAgeType"
+                  :value="item.ageId"
+                  class="ma-0"
+                />
+              </v-flex>
             </v-col>
             <v-col cols="12">
               <v-textarea
@@ -141,8 +149,8 @@ export default {
       street_number: '',
       team_image: '',
       sports_id: '',
-      team_type: '',
-      target_age_type: '',
+      team_type: [],
+      target_age_type: [],
       team_information: '',
       teamTypeList: this.$TEAM_TYPE,
       sportsList: this.$SPORTS,
