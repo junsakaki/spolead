@@ -8,6 +8,7 @@
       </v-breadcrumbs>
       <div class="page-header d-flex justify-space-between">
         <div class="page-header-title">
+          <favorite-button :team-id="team.id" class="mr-2" />
           {{ team.name }}
         </div>
         <div class="page-header-sub">
@@ -198,6 +199,7 @@ import ReviewContent from '~/components/teams/organisms/ReviewContent.vue'
 import CareerContent from '~/components/teams/organisms/CareerContent.vue'
 import CelebrityContent from '~/components/teams/organisms/CelebrityContent.vue'
 import TeamDetailSkelton from '~/components/teams/organisms/TeamDetailSkelton.vue'
+import FavoriteButton from '~/components/teams/atoms/FavoriteButton.vue'
 import transformTextToHtml from '~/utils/transformTextToHtml'
 
 export default {
@@ -209,7 +211,8 @@ export default {
     ReviewContent,
     CareerContent,
     CelebrityContent,
-    TeamDetailSkelton
+    TeamDetailSkelton,
+    FavoriteButton
   },
   data () {
     return {

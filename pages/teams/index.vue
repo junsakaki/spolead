@@ -19,9 +19,10 @@
         flex-wrap
         class="page-content"
       >
-        <v-card class="page-content-item" @click="goTeamDetail(team.id)">
-          <div class="hover-filter" />
+        <v-card class="page-content-item">
+          <div class="hover-filter" @click="goTeamDetail(team.id)" />
           <div class="page-content-item-header" style="display">
+            <favorite-button :team-id="team.id" class="mr-2" />
             {{ team.name }} {{ `${team.prefecture ? '(' + team.prefecture + team.city + team.street_number + ')' : ''}` }}
             <v-chip v-if="getTeamType(team.team_type)" color="primary" x-small>
               {{ getTeamType(team.team_type) }}
@@ -79,13 +80,15 @@ import { colors } from '~/assets/js/Colors.js'
 import Pagination from '~/components/shared/molecules/Pagination.vue'
 import SearchForms from '~/components/teams/organisms/SearchForms.vue'
 import TeamsSkelton from '~/components/teams/organisms/TeamsSkelton.vue'
+import FavoriteButton from '~/components/teams/atoms/FavoriteButton.vue'
 import transformTextToHtml from '~/utils/transformTextToHtml'
 
 export default {
   components: {
     Pagination,
     TeamsSkelton,
-    SearchForms
+    SearchForms,
+    FavoriteButton
   },
   data () {
     return {
