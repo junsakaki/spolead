@@ -8,6 +8,16 @@
     </v-content>
     <ScrollTopButton />
     <v-footer padless>
+      <div class="a8"><a href="https://px.a8.net/svt/ejp?a8mat=3HP98U+35PTBM+4OIY+HWPVL" rel="nofollow">
+        <img border="0" width="240" height="120" alt="" src="https://www22.a8.net/svt/bgt?aid=211130382191&wid=001&eno=01&mid=s00000021841003008000&mc=1"></a>
+        <img border="0" width="1" height="1" src="https://www10.a8.net/0.gif?a8mat=3HP98U+35PTBM+4OIY+HWPVL" alt="">
+        <a href="https://px.a8.net/svt/ejp?a8mat=3HP98U+3GFM7M+4JD4+62MDD" rel="nofollow">
+        <img border="0" width="240" height="120" alt="" src="https://www25.a8.net/svt/bgt?aid=211130382209&wid=001&eno=01&mid=s00000021172001020000&mc=1"></a>
+        <img border="0" width="1" height="1" src="https://www17.a8.net/0.gif?a8mat=3HP98U+3GFM7M+4JD4+62MDD" alt="">
+        <a href="https://px.a8.net/svt/ejp?a8mat=3HP98U+3GFM7M+4JD4+62MDD" rel="nofollow">
+        <img border="0" width="468" height="120" alt="" src="https://www20.a8.net/svt/bgt?aid=211130382206&wid=001&eno=01&mid=s00000005249001004000&mc=1"></a>
+        <img border="0" width="1" height="1" src="https://www15.a8.net/0.gif?a8mat=3HP98U+3ENBEA+14I2+5Z6WX" alt="">
+      </div>
       <div class="footer-links">
         <div v-for="link in filteredFooterLinks()" :key="link.title" class="link white--text">
           <router-link :to="link.to">
@@ -260,5 +270,9 @@ export default {
   width: 100%;
   padding: 8px 0;
   background-color: white;
+}
+.a8 {
+  text-align: center;
+  width: 100%;
 }
 </style>
