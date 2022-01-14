@@ -161,7 +161,9 @@ export default {
           text: 'チーム・スクールの登録',
           disabled: true
         }
-      ]
+      ],
+      latitude: 0,
+      longitude: 0
     }
   },
   // watch: {
@@ -203,34 +205,58 @@ export default {
           }
         })
     },
-    regTeam () {
-      if (!this.name || !this.mail_address || !this.sports_id) {
-        return
-      }
+    getAddressXY (callback) {
       this.$store
         .dispatch('api/apiRequest', {
-          api: 'teamCreate',
-          data: {
-            name: this.name,
-            mail_address: this.mail_address,
-            prefecture_code: this.prefecture_code,
-            prefecture: this.prefecture,
-            city_code: this.city_code,
-            city: this.city,
-            street_number: this.street_number,
-            team_image: this.team_image,
-            sports_id: this.sports_id,
-            team_type: this.team_type,
-            target_age_type: this.target_age_type,
-            team_information: this.team_information,
-            user_id: localStorage.getItem('userId')
+          api: 'getAddressXYApi',
+          params: {
+            q: this.prefecture + this.city + this.street_number
           }
         })
         .then((response) => {
           if (response.status === 200) {
-            this.$router.push(`/teams?sportsId=${this.sports_id}`)
+            if (response.data[0].geometry.coordinates) {
+              this.latitude = response.data[0].geometry.coordinates[0]
+              this.longitude = response.data[0].geometry.coordinates[1]
+              callback()
+            }
           }
         })
+    },
+    regTeam () {
+      if (!this.name || !this.mail_address || !this.sports_id) {
+        return
+      }
+      this.getAddressXY(
+        () => {
+          this.$store
+            .dispatch('api/apiRequest', {
+              api: 'teamCreate',
+              data: {
+                name: this.name,
+                mail_address: this.mail_address,
+                prefecture_code: this.prefecture_code,
+                prefecture: this.prefecture,
+                city_code: this.city_code,
+                city: this.city,
+                street_number: this.street_number,
+                team_image: this.team_image,
+                sports_id: this.sports_id,
+                team_type: this.team_type,
+                target_age_type: this.target_age_type,
+                team_information: this.team_information,
+                user_id: localStorage.getItem('userId'),
+                latitude: this.latitude,
+                longitude: this.longitude
+              }
+            })
+            .then((response) => {
+              if (response.status === 200) {
+                this.$router.push(`/teams?sportsId=${this.sports_id}`)
+              }
+            })
+        }
+      )
     },
     upload (file) {
       if (file !== undefined && file !== null) {
