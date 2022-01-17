@@ -242,13 +242,15 @@ export default {
       if (!targetTeamType) {
         return
       }
-      return this.$TEAM_TYPE.find(item => item.typeId === targetTeamType).teamType
+      const target = this.$TEAM_TYPE.find(item => item.typeId === Number(targetTeamType))
+      return target ? target.teamType : null
     },
     getTargetAgeType (targetAgeType) {
       if (!targetAgeType) {
         return
       }
-      return this.$TARGET_AGE.find(item => item.ageId === targetAgeType).targetAgeType
+      const target = this.$TARGET_AGE.find(item => item.ageId === Number(targetAgeType))
+      return target ? target.targetAgeType : null
     }
   }
 }
