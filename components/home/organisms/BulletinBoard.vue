@@ -34,7 +34,7 @@
         class="sports-area"
       >
         <router-link
-          v-for="sports in $SPORTS"
+          v-for="sports in cards"
           :key="sports.title"
           :to="`/forums?sportsId=${sports.id}`"
           class="sports"
@@ -51,6 +51,11 @@
           </v-card>
         </router-link>
       </v-flex>
+      <div d-flex class="text-center mt-4">
+        <router-link class="other-sports-link" to="/forums?sportsId=999">
+          その他のスポーツ
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -59,7 +64,7 @@
 export default {
   data () {
     return {
-      cards: this.$SPORTS,
+      cards: this.$SPORTS.slice(0, -1), // 最後尾の[その他]カテゴリは除外する
       isShowMore: false
     }
   },
@@ -110,5 +115,8 @@ export default {
 .sports-title {
   font-size: 12px;
   text-align: center;
+}
+.other-sports-link {
+  text-decoration: none;
 }
 </style>
