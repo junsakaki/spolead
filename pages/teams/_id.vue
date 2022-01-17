@@ -133,7 +133,14 @@
                 </div>
                 <div class="information-row">
                   <div>運営形式</div>
-                  <div>{{ getTargetAgeType(team.target_age_type) }} / {{ getTeamType(team.team_type) }}</div>
+                  <div class="d-flex align-center">
+                    <v-chip v-for="type in team.team_type ? team.team_type.split(',') : []" :key="type" color="primary" x-small class="mr-1">
+                      {{ getTeamType(type) }}
+                    </v-chip>
+                    <v-chip v-for="type in team.target_age_type ? team.target_age_type.split(',') : []" :key="type" color="primary" x-small class="mr-1">
+                      {{ getTargetAgeType(type) }}
+                    </v-chip>
+                  </div>
                 </div>
                 <div class="information-row">
                   <div>ホームページ</div>
@@ -290,12 +297,7 @@ export default {
         }).then((res) => {
           this.isLoading = false
           if (res.status === 200) {
-            // TODO: APIのレスポンスにcareersとcelobritiesが追加されたら以下のデータ改変は戻す
-            this.team = {
-              ...res.data.team,
-              careers: [{ id: 1, content: '進路実績テスト1' }, { id: 2, content: '進路実績テスト2' }],
-              celebrities: [{ id: 1, content: '有名人テスト1' }, { id: 2, content: '有名人テスト2' }]
-            }
+            this.team = res.data.team
           }
           this.pageTitle = this.getPageTitle({ isBreadcrumbs: false })
         }).catch(() => {
@@ -331,11 +333,12 @@ export default {
       this.getTeamDetail()
       this.closeModal()
     },
-    closeModal () {
+    closeModal (shouldUpdateTeamDetail) {
       this.editTeamModal = false
       this.registReviewsModal = false
       this.registCelebritiesModal = false
       this.registCareersModal = false
+      typeof shouldUpdateTeamDetail === 'boolean' && shouldUpdateTeamDetail && this.getTeamDetail()
     },
     getSportsName () {
       return this.$SPORTS.find(item => item.id === this.team.sports_id).title ?? ''

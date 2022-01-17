@@ -98,7 +98,7 @@
                 位置情報を取得中です...
               </div>
               <div v-else>
-                現在地(緯度: {{ search.area.latitude }}, 経度: {{ search.area.longitude }})に近いエリアから検索します。
+                現在地(緯度: {{ search.latitude }}, 経度: {{ search.longitude }})に近いエリアから検索します。
               </div>
             </div>
           </div>
@@ -160,11 +160,9 @@ export default {
         targetAgeType: [],
         teamType: [],
         sportsId: 1,
-        area: {
-          latitude: null,
-          longitude: null,
-          cityCodes: []
-        }
+        latitude: null,
+        longitude: null,
+        cityCodes: []
       },
       areaSelectionsType: 'specify',
       areaSelections: [{ id: 1, type: 'specify', name: '都道府県から選択する' }, { id: 2, type: 'current', name: '現在地から検索する' }],
@@ -189,16 +187,21 @@ export default {
   },
   methods: {
     fetchFormValues () {
+      if (this.$route.query.prefCode) {
+        const targetArea = this.$AREA.find(area => area.prefectures.find(pref => pref.id === Number(this.$route.query.prefCode)))
+        this.selectedAreaCode = this.$route.query.prefCode ? targetArea.id : null
+      }
+      this.selectedPrefectureCode = Number(this.$route.query.prefCode)
+      this.selectedCityCode = this.$route.query.cityCodes && this.$route.query.cityCodes.split(',').length === 1 ? this.$route.query.cityCodes : null
       this.search = {
         searchWord: this.$route.query.searchWord ?? '',
         targetAgeType: this.$route.query.targetAgeType ? this.$route.query.targetAgeType.split(',').map(Number) : [],
         teamType: this.$route.query.teamType ? this.$route.query.teamType.split(',').map(Number) : [],
         sportsId: Number(this.$route.query.sportsId) ?? 999,
-        area: {
-          latitude: this.$route.query.latitude ?? null,
-          longitude: this.$route.query.longitude ?? null,
-          cityCodes: null // TODO: cityCodeかprefCodeかで変わるべき
-        }
+        latitude: this.$route.query.latitude ?? null,
+        longitude: this.$route.query.longitude ?? null,
+        prefCode: this.$route.query.prefCode,
+        cityCodes: this.$route.query.cityCodes
       }
     },
     execSearch () {
@@ -206,11 +209,10 @@ export default {
         const cityCodes = this.selectedCityCode ? [this.selectedCityCode] : this.selectedPrefectureCode ? this.cities.map(city => Number(city.cityCode)) : null
         this.search = {
           ...this.search,
-          area: {
-            latitude: null,
-            longitude: null,
-            cityCodes
-          }
+          latitude: null,
+          longitude: null,
+          prefCode: cityCodes === null ? null : this.selectedPrefectureCode,
+          cityCodes
         }
       }
       this.closeModal()
@@ -225,11 +227,9 @@ export default {
         navigator.geolocation.getCurrentPosition((position) => {
           this.search = {
             ...this.search,
-            area: {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              cityCodes: null
-            }
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            cityCodes: null
           }
           this.isFetchingCurrentPosition = false
         }, () => {
@@ -240,11 +240,9 @@ export default {
       if (type === 'specify') {
         this.search = {
           ...this.search,
-          area: {
-            latitude: null,
-            longitude: null,
-            cityCodes: []
-          }
+          latitude: null,
+          longitude: null,
+          cityCodes: []
         }
       }
     },

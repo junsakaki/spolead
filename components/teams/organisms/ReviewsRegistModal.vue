@@ -278,12 +278,12 @@ export default {
             this.cost_post = ''
             this.cost_point = 3
             this.username = ''
-            this.closeModal()
+            this.closeModal(true)
           }
         })
     },
-    closeModal () {
-      this.$emit('closeModal')
+    closeModal (shouldUpdateTeamDetail) {
+      this.$emit('closeModal', shouldUpdateTeamDetail)
     }
   }
 }

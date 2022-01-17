@@ -21,16 +21,18 @@
       >
         <v-card class="page-content-item">
           <div class="hover-filter" @click="goTeamDetail(team.id)" />
-          <div class="page-content-item-header" style="display">
+          <div class="mx-3 mt-3">
             <favorite-button :team-id="team.id" class="mr-2" />
             {{ team.name }} {{ `${team.prefecture ? '(' + team.prefecture + team.city + team.street_number + ')' : ''}` }}
-            <v-chip v-if="getTeamType(team.team_type)" color="primary" x-small>
-              {{ getTeamType(team.team_type) }}
-            </v-chip>
-            <v-chip v-if="getTargetAgeType(team.target_age_type)" color="primary" x-small>
-              {{ getTargetAgeType(team.target_age_type) }}
-            </v-chip>
             <!-- <v-rating v-model="team.average_point" v-if="team.average_point" readonly /> -->
+          </div>
+          <div class="mx-3 mb-3">
+            <v-chip v-for="type in team.team_type ? team.team_type.split(',') : []" :key="`teamType-${type}`" color="primary" x-small class="mr-1">
+              {{ getTeamType(type) }}
+            </v-chip>
+            <v-chip v-for="type in team.target_age_type ? team.target_age_type.split(',') : []" :key="`targetAgeType-${type}`" color="primary" x-small class="mr-1">
+              {{ getTargetAgeType(type) }}
+            </v-chip>
           </div>
           <div :class="`${$vuetify.breakpoint.smAndDown && 'flex'} page-content-item-main`">
             <div class="page-content-item-list">
@@ -104,7 +106,6 @@ export default {
       searchWord: '',
       page: queryString.parse(location.search).page ? Number(queryString.parse(location.search).page) : 1,
       totalPages: 15,
-      params: {},
       breadcrumbs: [],
       isLoading: false,
       isError: false,
@@ -141,22 +142,17 @@ export default {
     getTeams () {
       this.isLoading = true
       this.isError = false
-      let params = {}
-      // get Teams related to sportsId
-      if (this.$route.query.sportsId) {
-        params = {
-          sports_id: this.$route.query.sportsId
-        }
-      // get Teams related to cityCodes
-      } else {
-        params = {
-          city_code: this.$route.query.cityCode
-        }
+      const params = {
+        searchWord: this.$route.query.searchWord,
+        teamType: this.$route.query.teamType,
+        targetAgeType: this.$route.query.targetAgeType,
+        area: {
+          latitude: this.$route.query.latitude ?? null,
+          longitude: this.$route.query.longitude ?? null,
+          cityCodes: this.$route.query.cityCodes ?? null
+        },
+        page: this.page
       }
-      this.params = params
-
-      params.search_word = this.searchWord
-      params.page = this.page
 
       this.$store
         .dispatch('api/apiRequest', {
@@ -179,11 +175,17 @@ export default {
       this.$router.push({ path: `teams/${teamId}`, query: { ...this.$route.query, page: this.page } })
     },
     execSearch (search) {
-      this.searchWord = search.searchWord
-      // TODO: 他の項目もセットする
       this.page = 1
       this.getTeams()
-      this.$router.replace(`/teams?sportsId=${search.sportsId}&searchWord=${search.searchWord}&teamType=${search.teamType}&targetAgeType=${search.targetAgeType}`)
+      this.$router.replace({
+        path: 'teams',
+        query: {
+          ...search,
+          teamType: search.teamType.toString(),
+          targetAgeType: search.targetAgeType.toString(),
+          cityCodes: search.cityCodes ? search.cityCodes.toString() : null
+        }
+      })
     },
     getLatestReview (reviews) {
       let latestReviewDate = ''

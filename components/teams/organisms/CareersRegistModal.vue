@@ -58,12 +58,12 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             this.content = ''
-            this.closeModal()
+            this.closeModal(true)
           }
         })
     },
-    closeModal () {
-      this.$emit('closeModal')
+    closeModal (shouldUpdateTeamDetail) {
+      this.$emit('closeModal', shouldUpdateTeamDetail)
     }
   }
 }

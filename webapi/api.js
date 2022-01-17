@@ -16,6 +16,11 @@ export default {
     url: 'https://opendata.resas-portal.go.jp/api/v1/cities',
     method: 'get'
   },
+  // 緯度経度取得外部API
+  getAddressXYApi: {
+    url: 'https://msearch.gsi.go.jp/address-search/AddressSearch',
+    method: 'get'
+  },
 
   // アカウント登録
   signup: {

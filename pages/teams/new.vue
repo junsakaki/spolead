@@ -23,6 +23,9 @@
               <v-text-field v-model="mail_address" label="メールアドレス*" required />
             </v-col>
             <v-col cols="12">
+              <v-text-field v-model="url" label="ホームページ" />
+            </v-col>
+            <v-col cols="12">
               <!-- NOTE once simple select  -->
               <!-- <v-autocomplete
                 :items="['野球', 'バスケ', 'サッカー', 'ダンス', 'バレー', 'ラグビー']"
@@ -141,6 +144,7 @@ export default {
       cityList: ['都道府県を選択してください'],
       name: '',
       mail_address: '',
+      url: '',
       zipcode: '',
       prefecture_code: '',
       prefecture: '',
@@ -235,6 +239,7 @@ export default {
               data: {
                 name: this.name,
                 mail_address: this.mail_address,
+                url: this.url,
                 prefecture_code: this.prefecture_code,
                 prefecture: this.prefecture,
                 city_code: this.city_code,
@@ -242,8 +247,8 @@ export default {
                 street_number: this.street_number,
                 team_image: this.team_image,
                 sports_id: this.sports_id,
-                team_type: this.team_type,
-                target_age_type: this.target_age_type,
+                team_type: this.team_type.toString(),
+                target_age_type: this.target_age_type.toString(),
                 team_information: this.team_information,
                 user_id: localStorage.getItem('userId'),
                 latitude: this.latitude,

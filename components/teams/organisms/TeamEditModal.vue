@@ -16,6 +16,9 @@
                 <v-text-field v-model="mail_address" label="メールアドレス*" required />
               </v-col>
               <v-col cols="12">
+                <v-text-field v-model="url" label="ホームページ" />
+              </v-col>
+              <v-col cols="12">
                 <v-select
                   v-model="sports_id"
                   :items="sportsList"
@@ -62,23 +65,31 @@
                   required
                 />
               </v-col>
-              <v-col cols="12" sm="6">
-                <v-select
-                  v-model="team_type"
-                  :items="teamTypeList"
-                  item-text="teamType"
-                  item-value="typeId"
-                  label="運営団体"
-                />
+              <v-col cols="12" sm="12">
+                <div>運営団体</div>
+                <v-flex d-flex flex-wrap>
+                  <v-checkbox
+                    v-for="item in $TEAM_TYPE"
+                    :key="item.typeId"
+                    v-model="team_type"
+                    :label="item.teamType"
+                    :value="item.typeId"
+                    class="ma-0"
+                  />
+                </v-flex>
               </v-col>
-              <v-col cols="12" sm="6">
-                <v-select
-                  v-model="target_age_type"
-                  :items="targetAgeList"
-                  item-text="targetAgeType"
-                  item-value="ageId"
-                  label="対象層"
-                />
+              <v-col cols="12" sm="12">
+                <div>対象層</div>
+                <v-flex d-flex flex-wrap>
+                  <v-checkbox
+                    v-for="item in $TARGET_AGE"
+                    :key="item.id"
+                    v-model="target_age_type"
+                    :label="item.targetAgeType"
+                    :value="item.ageId"
+                    class="ma-0"
+                  />
+                </v-flex>
               </v-col>
               <v-col cols="12">
                 <v-textarea
@@ -120,24 +131,26 @@ export default {
   },
   created () {
     this.getPrefApi()
+    this.getCityApi(this.team.prefecture_code)
   },
   mounted() {
     this.id = this.team.id
     this.name = this.team.name
     this.mail_address = this.team.mail_address
+    this.url = this.team.url
     this.prefecture = this.team.prefecture
     this.prefecture_code = this.team.prefecture_code
     // set initial value
     this.prefectureList = [{ prefName: this.team.prefecture, prefCode: this.prefecture_code}]
     this.city = this.team.city
-    this.city_code = this.team.city_code
+    this.city_code = this.team.city_codes
     // set initial value
-    this.cityList = [{ cityName: this.team.city, cityCode: this.city_code}]
+    this.cityList = [{ cityName: this.team.city, cityCode: this.team.city_codes}]
     this.street_number = this.team.street_number
     this.team_image = this.team.team_image
     this.sports_id = this.team.sports_id
-    this.team_type = this.team.team_type
-    this.target_age_type = this.team.target_age_type
+    this.team_type = this.team.team_type ? this.team.team_type.split(',').map(Number) : []
+    this.target_age_type = this.team.target_age_type ? this.team.target_age_type.split(',').map(Number) : []
     this.team_information = this.team.team_information
   },
   data () {
@@ -147,6 +160,7 @@ export default {
       id: '',
       name: '',
       mail_address: '',
+      url: '',
       zipcode: '',
       initial_prefecutre: '',
       prefecture_code: '',
@@ -157,8 +171,8 @@ export default {
       street_number: '',
       team_image: '',
       sports_id: '',
-      team_type: '',
-      target_age_type: '',
+      team_type: [],
+      target_age_type: [],
       team_information: '',
       teamTypeList: [
         { teamType: 'チーム', typeId: 1 },
@@ -180,7 +194,9 @@ export default {
           { targetAgeType: '高校生', ageId: 4 },
           { targetAgeType: '大学・専門学生', ageId: 5 },
           { targetAgeType: '社会人', ageId: 6 },
-      ]
+      ],
+      latitude: 0,
+      longitude: 0
     }
   },
   methods: {
@@ -206,6 +222,25 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             this.cityList = response.data.result
+            this.city_code = this.cityList.find(city => city.cityName === this.city).cityCode
+          }
+        })
+    },
+    getAddressXY (callback) {
+      this.$store
+        .dispatch('api/apiRequest', {
+          api: 'getAddressXYApi',
+          params: {
+            q: this.prefecture + this.city + this.street_number
+          }
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            if (response.data[0].geometry.coordinates) {
+              this.latitude = response.data[0].geometry.coordinates[0]
+              this.longitude = response.data[0].geometry.coordinates[1]
+              callback()
+            }
           }
         })
     },
@@ -213,30 +248,37 @@ export default {
       if (!this.name || !this.mail_address || !this.sports_id) {
         return
       }
-      this.$store
-        .dispatch('api/apiRequest', {
-          api: 'teamEdit',
-          data: {
-            id: this.id,
-            name: this.name,
-            mail_address: this.mail_address,
-            prefecture_code: this.prefecture_code,
-            prefecture: this.prefecture,
-            city_code: this.city_code,
-            city: this.city,
-            street_number: this.street_number,
-            team_image: this.team_image,
-            sports_id: this.sports_id,
-            team_type: this.team_type,
-            target_age_type: this.target_age_type,
-            team_information: this.team_information
-          }
-        })
-        .then((response) => {
-          if (response.status === 200) {
-            this.closeModal()
-          }
-        })
+      this.getAddressXY(
+        () => {
+          this.$store
+            .dispatch('api/apiRequest', {
+              api: 'teamEdit',
+              data: {
+                id: this.id,
+                name: this.name,
+                mail_address: this.mail_address,
+                url: this.url,
+                prefecture_code: this.prefecture_code,
+                prefecture: this.prefecture,
+                city_code: this.city_code,
+                city: this.city,
+                street_number: this.street_number,
+                team_image: this.team_image,
+                sports_id: this.sports_id,
+                team_type: this.team_type.toString(),
+                target_age_type: this.target_age_type.toString(),
+                team_information: this.team_information,
+                latitude: this.latitude,
+                longitude: this.longitude
+              }
+            })
+            .then((response) => {
+              if (response.status === 200) {
+                this.closeModal()
+              }
+            })
+        }
+      )
     },
     upload (file) {
       if (file !== undefined && file !== null) {
