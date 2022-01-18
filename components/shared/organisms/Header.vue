@@ -38,7 +38,7 @@
         >
       </router-link>
       <div class="links">
-        <button v-if="$route.path !== '/'" class="link icon-button align-center">
+        <button class="link icon-button align-center">
           <v-icon small>
             mdi-account-group
           </v-icon>
@@ -51,7 +51,7 @@
             </router-link>
           </div>
         </button>
-        <button v-if="$route.path !== '/'" class="link icon-button align-center">
+        <button class="link icon-button align-center">
           <v-icon small>
             mdi-clipboard-text
           </v-icon>
