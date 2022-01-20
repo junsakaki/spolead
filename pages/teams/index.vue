@@ -239,11 +239,8 @@ export default {
         })
     },
     getPageTitle ({ isBreadcrumbs }) {
-      const { sportsId } = this.$route.query
-      const sportsTitle = sportsId ? this.$SPORTS.find(item => item.id === Number(sportsId)).title : undefined
-      const cityName = this.selectedCity?.cityName ?? undefined
       const page = this.page ? `（${this.page}ページ目）` : undefined
-      return `${sportsTitle ?? ''}${cityName ?? ''}のチーム・スクール${page ?? ''}${isBreadcrumbs ? '' : ' | '}`
+      return `チーム・スクール${page ?? ''}${isBreadcrumbs ? '' : ' | '}`
     },
     getToken () {
       this.token = localStorage.getItem('token')

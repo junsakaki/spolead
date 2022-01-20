@@ -165,7 +165,7 @@
       <div v-else-if="mode === 'city'">
         <div class="city-select-area">
           <div class="area-title">
-            {{ selectedPrefecture.title }}の市区町村一覧
+            <a class="area-link ma-0" @click="showTeamsRelatedToCity(null)">{{ selectedPrefecture.title }}</a>の市区町村一覧
           </div>
           <v-flex d-flex flex-wrap class="list">
             <a
@@ -196,10 +196,22 @@ export default {
     }
   },
   methods: {
-    showTeamsRelatedToCity (cityCode) {
-      this.$router.push({ name: 'teams', params: { prefCode: this.selectedPrefecture.id, cityCode }, query: { prefCode: this.selectedPrefecture.id, cityCode } })
-      localStorage.setItem('sportsId', '')
-      localStorage.setItem('cityCode', cityCode)
+    showTeamsRelatedToCity (cityCodes) {
+      if (cityCodes === null) {
+        this.$router.push({
+          name: 'teams',
+          params: {
+            prefCode: this.selectedPrefecture.id,
+            cityCodes: this.cityCards.map(city => Number(city.cityCode))
+          },
+          query: {
+            prefCode: this.selectedPrefecture.id,
+            cityCodes: this.cityCards.map(city => Number(city.cityCode)).toString()
+          }
+        })
+      } else {
+        this.$router.push({ name: 'teams', params: { prefCode: this.selectedPrefecture.id, cityCodes }, query: { prefCode: this.selectedPrefecture.id, cityCodes } })
+      }
     },
     goCitySelect (pref) {
       this.mode = 'city'

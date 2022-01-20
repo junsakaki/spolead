@@ -381,11 +381,9 @@ export default {
         })
     },
     getPrevPageTitle ({ isBreadcrumbs }) {
-      const { sportsId, page } = this.$route.query
-      const sportsTitle = sportsId ? this.$SPORTS.find(item => item.id === Number(sportsId)).title : undefined
-      const cityName = this.selectedCity?.cityName ?? undefined
+      const { page } = this.$route.query
       const pageNum = page ? `（${page}ページ目）` : undefined
-      return `${sportsTitle ?? ''}${cityName ?? ''}のチーム・スクール${pageNum ?? ''}${isBreadcrumbs ? '' : ' | '}`
+      return `チーム・スクール${pageNum ?? ''}${isBreadcrumbs ? '' : ' | '}`
     },
     getTeamType (targetTeamType) {
       if (!targetTeamType) {
