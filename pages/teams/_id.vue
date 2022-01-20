@@ -77,7 +77,7 @@
               </button>
               <!-- display reviews as much as review count -->
               <div v-if="team.reviews && team.reviews.length > 0">
-                <div v-for="review in team.reviews" :key="review.id">
+                <div v-for="review in team.reviews" :key="`review-${review.id}`">
                   <review-content :review="review" />
                 </div>
               </div>
@@ -92,7 +92,7 @@
                 + 進路実績を投稿する
               </button>
               <div v-if="team.careers && team.careers.length > 0">
-                <div v-for="career in team.careers" :key="career.id">
+                <div v-for="career in team.careers" :key="`career-${career.id}`">
                   <career-content :career="career" />
                 </div>
               </div>
@@ -107,7 +107,7 @@
                 + 有名人を投稿する
               </button>
               <div v-if="team.celebrities && team.celebrities.length > 0">
-                <div v-for="celebrity in team.celebrities" :key="celebrity.id">
+                <div v-for="celebrity in team.celebrities" :key="`celebrity-${celebrity.id}`">
                   <celebrity-content :celebrity="celebrity" />
                 </div>
               </div>
@@ -134,10 +134,10 @@
                 <div class="information-row">
                   <div>運営形式</div>
                   <div class="d-flex align-center">
-                    <v-chip v-for="type in team.team_type ? team.team_type.split(',') : []" :key="type" color="primary" x-small class="mr-1">
+                    <v-chip v-for="type in team.team_type ? team.team_type.split(',') : []" :key="`team_type-${type}`" color="primary" x-small class="mr-1">
                       {{ getTeamType(type) }}
                     </v-chip>
-                    <v-chip v-for="type in team.target_age_type ? team.target_age_type.split(',') : []" :key="type" color="primary" x-small class="mr-1">
+                    <v-chip v-for="type in team.target_age_type ? team.target_age_type.split(',') : []" :key="`target_age_type-${type}`" color="primary" x-small class="mr-1">
                       {{ getTargetAgeType(type) }}
                     </v-chip>
                   </div>
