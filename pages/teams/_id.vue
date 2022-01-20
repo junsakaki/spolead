@@ -144,7 +144,7 @@
                 </div>
                 <div class="information-row">
                   <div>ホームページ</div>
-                  <div>{{ team.url }}</div>
+                  <a :href="team.url" target="_blank">{{ team.url }}</a>
                 </div>
               </div>
               <iframe

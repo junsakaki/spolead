@@ -143,13 +143,14 @@ export default {
       this.isLoading = true
       this.isError = false
       const params = {
-        searchWord: this.$route.query.searchWord,
-        teamType: this.$route.query.teamType,
-        targetAgeType: this.$route.query.targetAgeType,
+        sports_id: this.$route.query.sportsId ?? null,
+        search_word: this.$route.query.searchWord ?? null,
+        team_type: this.$route.query.teamType ?? null,
+        target_age_type: this.$route.query.targetAgeType ?? null,
         area: {
-          latitude: this.$route.query.latitude ?? null,
-          longitude: this.$route.query.longitude ?? null,
-          cityCodes: this.$route.query.cityCodes ?? null
+          latitude: Number(this.$route.query.latitude) ?? null,
+          longitude: Number(this.$route.query.longitude) ?? null,
+          city_codes: this.$route.query.cityCodes ?? null
         },
         page: this.page
       }

@@ -237,8 +237,8 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             if (response.data[0].geometry.coordinates) {
-              this.latitude = response.data[0].geometry.coordinates[0]
-              this.longitude = response.data[0].geometry.coordinates[1]
+              this.longitude = response.data[0].geometry.coordinates[0]
+              this.latitude = response.data[0].geometry.coordinates[1]
               callback()
             }
           }
