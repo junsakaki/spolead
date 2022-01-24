@@ -81,7 +81,7 @@
               />
             </v-col>
             <v-col cols="12" sm="6">
-              <div>運営団体</div>
+              <div>運営形式</div>
               <v-flex d-flex flex-wrap>
                 <v-checkbox
                   v-for="item in $TEAM_TYPE"

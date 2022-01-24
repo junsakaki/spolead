@@ -137,6 +137,11 @@
                     <v-chip v-for="type in team.team_type ? team.team_type.split(',') : []" :key="`team_type-${type}`" color="primary" x-small class="mr-1">
                       {{ getTeamType(type) }}
                     </v-chip>
+                  </div>
+                </div>
+                <div class="information-row">
+                  <div>対象層</div>
+                  <div class="d-flex align-center">
                     <v-chip v-for="type in team.target_age_type ? team.target_age_type.split(',') : []" :key="`target_age_type-${type}`" color="primary" x-small class="mr-1">
                       {{ getTargetAgeType(type) }}
                     </v-chip>
