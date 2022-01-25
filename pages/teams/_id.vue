@@ -8,7 +8,7 @@
       </v-breadcrumbs>
       <div class="page-header d-flex justify-space-between">
         <div class="page-header-title">
-          <favorite-button :team-id="team.id" class="mr-2" />
+          <favorite-button :team-id="team.id" :is-favorite="favoriteTeams.includes(team.id)" class="mr-2" />
           {{ team.name }}
         </div>
         <div class="page-header-sub">
@@ -249,7 +249,8 @@ export default {
       selectedCity: undefined,
       pageTitle: undefined,
       isLoading: false,
-      isError: false
+      isError: false,
+      favoriteTeams: []
     }
   },
   head () {
@@ -288,8 +289,23 @@ export default {
     const { prefCode, cityCode } = this.$route.query
     this.getTeamDetail()
     this.getCityData({ prefCode, cityCode })
+    this.getUser()
   },
   methods: {
+    getUser () {
+      this.$store
+        .dispatch('api/apiRequest', {
+          api: 'userIndex',
+          query: {
+            id: localStorage.getItem('userId')
+          }
+        }).then((res) => {
+          this.isLoading = false
+          if (res.status === 200) {
+            this.favoriteTeams = res.data.user.favorite_teams
+          }
+        })
+    },
     getTeamDetail () {
       this.isLoading = true
       this.isError = false

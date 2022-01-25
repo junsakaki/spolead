@@ -24,6 +24,10 @@
 <script>
 export default {
   props: {
+    isFavorite: {
+      type: Boolean,
+      default: null
+    },
     teamId: {
       type: Number,
       default: null
@@ -31,7 +35,6 @@ export default {
   },
   data () {
     return {
-      isFavorite: false,
       snackbar: {
         display: false,
         text: ''
@@ -47,8 +50,19 @@ export default {
         }
         return
       }
-      this.isFavorite = !this.isFavorite
-      console.log(`${this.teamId}のチームをお気に入り${this.isFavorite ? '登録' : '解除'}します`)
+      this.$store
+        .dispatch('api/apiRequest', {
+          api: 'favoriteTeamsCreate',
+          data: {
+            user_id: localStorage.getItem('userId'),
+            team_id: this.teamId
+          }
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            // TODO: データを更新する必要がある？
+          }
+        })
     }
   }
 }
