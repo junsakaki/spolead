@@ -2,7 +2,7 @@
   <div class="page-content">
     <div v-if="$vuetify.breakpoint.smAndDown">
       <div width="100%" class="h2 text-left page-content-title SP">
-        エリアから探す
+        エリアからチームやスクールを探す
         <a v-if="mode == 'city'" @click="backMode">
           <font class="back">都道府県一覧に戻る</font>
         </a>
@@ -104,7 +104,7 @@
     </div>
     <div v-else>
       <div width="100%" class="h2 text-left page-content-title">
-        エリアから探す
+        エリアからチームやスクールを探す
         <a v-if="mode == 'city'" @click="backMode">
           <font class="back">都道府県一覧に戻る</font>
         </a>
