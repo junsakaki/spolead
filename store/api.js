@@ -30,8 +30,8 @@ export const actions = {
         }
       }
       if (reqData.api === 'getCityApi' || reqData.api === 'getPrefApi') {
-        req.headers['X-API-KEY'] = process.env.GET_CITY_APIKEY
-        // req.headers['X-API-KEY'] = 'UTcSHZB4MAnbEfmMQznGeiFmyapUsZjwhz9ulUrv'
+        // req.headers['X-API-KEY'] = process.env.GET_CITY_APIKEY
+        req.headers['X-API-KEY'] = 'UTcSHZB4MAnbEfmMQznGeiFmyapUsZjwhz9ulUrv'
       }
       axios(req)
         .then((response) => {
