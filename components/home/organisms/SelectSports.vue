@@ -2,7 +2,7 @@
   <div class="page-content">
     <div v-if="$vuetify.breakpoint.smAndDown">
       <div class="h2 text-left page-content-title  SP">
-        スポーツから探す
+        スポーツからチームやスクールを探す
       </div>
       <v-flex
         xs12
@@ -41,7 +41,7 @@
     </div>
     <div v-else>
       <div class="h2 text-left page-content-title">
-        スポーツから探す
+        スポーツからチームやスクールを探す
       </div>
       <v-flex
         xs12
