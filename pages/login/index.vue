@@ -12,6 +12,8 @@ export default {
   created () {
     if (!this.$auth.user && !location.hash) {
       this.$auth.loginWith('auth0')
+    } else {
+      this.$router.replace('/')
     }
   }
 }

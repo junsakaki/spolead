@@ -14,7 +14,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="blue darken-1" text @click="closeModal">
+          <v-btn color="blue darken-1" text @click="closeModal(false)">
             やめる
           </v-btn>
           <v-btn color="blue darken-1" text :disabled="content === ''" @click="postReview">

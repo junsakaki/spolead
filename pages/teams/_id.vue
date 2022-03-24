@@ -321,7 +321,12 @@ export default {
         }).then((res) => {
           this.isLoading = false
           if (res.status === 200) {
-            this.team = res.data.team
+            // TODO: APIのレスポンスにcareersとcelobritiesが追加されたら以下のデータ改変は戻す
+            this.team = {
+              ...res.data.team,
+              careers: [{ id: 1, content: '進路実績テスト1' }, { id: 2, content: '進路実績テスト2' }],
+              celebrities: [{ id: 1, content: '有名人テスト1' }, { id: 2, content: '有名人テスト2' }]
+            }
           }
           this.pageTitle = this.getPageTitle({ isBreadcrumbs: false })
         }).catch(() => {

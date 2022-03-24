@@ -114,12 +114,12 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
-  background: #7e7e7e;
+  background: #1976d214;
   opacity: 0;
   transition-duration: 0.5s;
   cursor: pointer;
 }
 .forum:hover .filter {
-  opacity: 0.1;
+  opacity: 1;
 }
 </style>

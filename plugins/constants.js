@@ -134,6 +134,21 @@ const TEAM_TYPE = [
   { teamType: 'スクール', typeId: 2 }
 ]
 
+const CONTACT_TYPE = [
+  { type: '直接', id: 1 },
+  { type: 'オンライン', id: 2 }
+]
+
+const PAYMENT_TYPE = [
+  { type: 'スポット', id: 1 },
+  { type: '月定額', id: 2 }
+]
+
+const RECRUITMENT_TYPE = [
+  { target: 'student', name: '生徒を探す', id: 1 },
+  { target: 'coach', name: 'コーチを探す', id: 2 }
+]
+
 export default (context, inject) => {
   inject('SPORTS', SPORTS)
   inject('AREA', AREA)
@@ -141,4 +156,7 @@ export default (context, inject) => {
   inject('BREADCRUMBS', BREADCRUMBS)
   inject('TARGET_AGE', TARGET_AGE)
   inject('TEAM_TYPE', TEAM_TYPE)
+  inject('CONTACT_TYPE', CONTACT_TYPE)
+  inject('PAYMENT_TYPE', PAYMENT_TYPE)
+  inject('RECRUITMENT_TYPE', RECRUITMENT_TYPE)
 }

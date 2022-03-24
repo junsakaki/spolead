@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center">
-    <v-dialog :value="dialog" persistent max-width="600px" class="search-form">
+    <v-dialog :value="dialog" persistent max-width="600px">
       <v-card class="pa-4">
         <v-card-text>
           <div class="mb-5">

@@ -106,13 +106,21 @@ export default {
           {
             title: 'チームを登録する',
             to: '/teams/new'
+          },
+          {
+            title: 'オンラインサロンを申請する',
+            to: '/salons/new'
+          },
+          {
+            title: 'クラウドファンディングを申請する',
+            to: '/funds/new'
           }
         ]
       } else {
         return [
           ...this.footerLinks,
           {
-            title: 'チーム登録するにはログインが必要です',
+            title: 'チーム登録やオンラインサロン/クラウドファンディングの申請にはログインが必要です',
             to: '/login'
           }
         ]

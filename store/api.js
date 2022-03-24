@@ -8,17 +8,9 @@ export const actions = {
     return new Promise((resolve, reject) => {
       const req = {}
       req.timeout = 10000
-      if (
-        apiEndpoint[reqData.api].method === 'post' ||
-        apiEndpoint[reqData.api].method === 'delete' ||
-        apiEndpoint[reqData.api].method === 'patch'
-      ) {
-        req.data = reqData.data
-        req.method = apiEndpoint[reqData.api].method
-      } else {
-        req.params = reqData.params
-        req.method = apiEndpoint[reqData.api].method
-      }
+      req.data = reqData.data
+      req.params = reqData.params
+      req.method = apiEndpoint[reqData.api].method
       if (reqData.query) {
         req.url = apiEndpoint[reqData.api].url.replace(`:${Object.keys(reqData.query)[0]}`, reqData.query[Object.keys(reqData.query)[0]])
       } else {

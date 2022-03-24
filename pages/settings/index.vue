@@ -5,18 +5,15 @@
         <v-icon>mdi-chevron-right</v-icon>
       </template>
     </v-breadcrumbs>
-    <div>
-      <div class="text-center">
-        <v-btn color="error" text class="mt-4" @click="logOut">
-          ログアウト
-        </v-btn>
-      </div>
-    </div>
+    <Menu />
   </div>
 </template>
 
 <script>
+import Menu from '~/components/settings/organisms/Menu.vue'
+
 export default {
+  components: { Menu },
   data () {
     return {
       breadcrumbs: [
@@ -36,15 +33,11 @@ export default {
   created () {
     // 未ログインの場合はトップ画面へリダイレクトする
     if (!this.$auth.loggedIn) {
-      this.$router.replace('/')
+      this.$router.replace('/login')
     }
-  },
-  methods: {
-    validate () {
-      return this.$refs.form.validate()
-    },
-    logOut () {
-      this.$router.push('/logout')
+    // デスクトップ版のみ/settingと/setting/accountの内容が同じなのでリプレイスする
+    if (!this.$vuetify.breakpoint.smAndDown) {
+      this.$router.replace('/settings/salons')
     }
   }
 }
