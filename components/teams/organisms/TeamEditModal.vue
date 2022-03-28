@@ -253,6 +253,7 @@ export default {
           this.$store
             .dispatch('api/apiRequest', {
               api: 'teamEdit',
+              query: { id: this.id},
               data: {
                 id: this.id,
                 name: this.name,
