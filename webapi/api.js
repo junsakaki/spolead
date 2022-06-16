@@ -1,9 +1,5 @@
-// localVer
-// const foundation = 'http://localhost:3000/v1'
 const foundation = 'https://develop.spoleader.com/api/v1'
 
-// productionVer
-// const foundation = process.env.FOUNDATION
 
 export default {
   // 都道府県取得外部API
