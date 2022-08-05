@@ -3,14 +3,17 @@
     <div class="subtitle-1 font-weight-bold">
       <div>指導者/生徒を募集する</div>
       <div class="text-center px-4 mt-2">
-        <router-link to="/lessons/new" class="lesson-link">
+        <router-link to="/lessons/new" class="lesson-link" target="_blank">
           <v-btn color="primary" outlined block>
             募集情報入力フォームへ
+            <v-icon small class="ml-1">
+              mdi-open-in-new
+            </v-icon>
           </v-btn>
         </router-link>
       </div>
     </div>
-    <div class="subtitle-1 font-weight-bold mt-8">
+    <div class="subtitle-1 font-weight-bold mt-8 mb-8">
       <div>公開中のマッチング一覧</div>
       <div v-if="lessons.length > 0" class="mt-2">
         <div v-for="lesson in lessons" :key="lesson.id">
@@ -75,7 +78,7 @@
 </template>
 
 <script>
-import LessonEditModal from '~/components/settings/organisms/LessonEditModal.vue'
+import LessonEditModal from '~/components/organizer/organisms/LessonEditModal.vue'
 
 export default {
   components: { LessonEditModal },

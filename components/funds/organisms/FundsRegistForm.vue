@@ -148,6 +148,9 @@
             <v-text-field v-model="form.owner.name" label="氏名" required />
           </v-col>
           <v-col cols="12">
+            <v-text-field v-model="form.owner.mail_address" label="メールアドレス" required />
+          </v-col>
+          <v-col cols="12">
             <v-text-field v-model="form.owner.address" label="住所" required />
           </v-col>
           <v-col cols="12">

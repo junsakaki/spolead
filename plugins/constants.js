@@ -120,6 +120,16 @@ const BREADCRUMBS = [
   }
 ]
 
+const ORGANIZER_BREADCRUMBS = [
+  {
+    text: 'TOP',
+    link: true,
+    exact: true,
+    disabled: false,
+    to: { path: '/organizer' }
+  }
+]
+
 const TARGET_AGE = [
   { targetAgeType: 'キッズ', ageId: 1 },
   { targetAgeType: '小学生', ageId: 2 },
@@ -154,6 +164,7 @@ export default (context, inject) => {
   inject('AREA', AREA)
   inject('TOP_PREFECTURE', TOP_PREFECTURE)
   inject('BREADCRUMBS', BREADCRUMBS)
+  inject('ORGANIZER_BREADCRUMBS', ORGANIZER_BREADCRUMBS)
   inject('TARGET_AGE', TARGET_AGE)
   inject('TEAM_TYPE', TEAM_TYPE)
   inject('CONTACT_TYPE', CONTACT_TYPE)

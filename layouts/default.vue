@@ -1,6 +1,7 @@
 <template>
   <v-app dark>
-    <Header />
+    <OrganizerHeader v-if="shouldShowOrganizerHeader" />
+    <Header v-else-if="shouldShowNormalHeader" />
     <v-content>
       <v-container :class="$vuetify.breakpoint.smAndDown && 'SP'">
         <nuxt />
@@ -25,7 +26,7 @@
         <img border="0" width="300" height="250" alt="" src="https://www26.a8.net/svt/bgt?aid=220121080377&wid=001&eno=01&mid=s00000021147002010000&mc=1"></a>
         <img border="0" width="1" height="1" src="https://www19.a8.net/0.gif?a8mat=3N1YIG+68GFUA+4J66+BYT9D" alt="">
       </div>
-      <div class="footer-links">
+      <div v-if="!!$route.path.indexOf('/organizer')" class="footer-links">
         <div v-for="link in filteredFooterLinks()" :key="link.title" class="link white--text">
           <router-link :to="link.to">
             {{ link.title }}
@@ -41,11 +42,13 @@
 
 <script>
 import Header from '~/components/shared/organisms/Header.vue'
+import OrganizerHeader from '~/components/organizer/organisms/Header.vue'
 import ScrollTopButton from '~/components/shared/atoms/ScrollTopButton.vue'
 
 export default {
   components: {
     Header,
+    OrganizerHeader,
     ScrollTopButton
   },
   data () {
@@ -96,6 +99,12 @@ export default {
       } else {
         return ''
       }
+    },
+    shouldShowOrganizerHeader () {
+      return this.$route.path.startsWith('/organizer') && !this.$route.path.startsWith('/organizer/login')
+    },
+    shouldShowNormalHeader () {
+      return !this.$route.path.startsWith('/organizer') && !this.$route.path.startsWith('/organizer/login')
     }
   },
   methods: {

@@ -9,7 +9,7 @@
           class="logo"
         >
       </router-link>
-      <div class="d-flex align-center justify-center">
+      <div v-if="!$route.path.endsWith('/new')" class="d-flex align-center justify-center">
         <v-menu
           open-on-hover
           bottom
@@ -67,7 +67,7 @@
           class="logo"
         >
       </router-link>
-      <div class="links">
+      <div v-if="!$route.path.endsWith('/new')" class="links">
         <div class="d-flex align-center justify-center">
           <v-menu
             open-on-hover

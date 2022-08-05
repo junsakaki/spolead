@@ -24,7 +24,6 @@ export default {
   data () {
     return {
       breadcrumbs: [
-        ...this.$BREADCRUMBS,
         {
           text: '指導者マッチングの登録申請',
           disabled: true
@@ -55,8 +54,6 @@ export default {
               this.userId = Number(res.data.user.id)
             }
           })
-      } else {
-        this.$router.push('/login')
       }
     },
     submit (form) {
