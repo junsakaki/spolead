@@ -5,18 +5,18 @@
         <v-icon>mdi-chevron-right</v-icon>
       </template>
     </v-breadcrumbs>
-    <div class="salons-head">
+    <div class="salon-head">
+    <p>
     オンラインレッスンやファンクラブの新しいカタチを目指して提供している オンラインサロンについての説明がここに入ります。
-    </div>
-    <div class="salons-eye">
-      <img src="@/assets/images/salon_about1.png" alt="Logo">
-      <img src="@/assets/images/salon_about2.png" alt="Logo">
-      <img src="@/assets/images/salon_about3.png" alt="Logo">
+    オンラインレッスンやファンクラブの新しいカタチを目指して提供している オンラインサロンについての説明がここに入ります。
+    オンラインレッスンやファンクラブの新しいカタチを目指して提供している オンラインサロンについての説明がここに入ります。
+    オンラインレッスンやファンクラブの新しいカタチを目指して提供している オンラインサロンについての説明がここに入ります。
+    オンラインレッスンやファンクラブの新しいカタチを目指して提供している オンラインサロンについての説明がここに入ります。
+    </p>
+      <img src="@/assets/images/about.png" alt="Logo" class="salon-eye">
     </div>
     <div class="salon-about-content1">
-      <div class="salon-about-woman">
-        <img src="@/assets/images/women.png" alt="Logo">
-      </div>
+        <img src="@/assets/images/women.png" alt="Logo" class="salon-about-woman">
       <div class="salon-about-comment1">
         <h2>オンラインサロンの特徴</h2>
         <p>
@@ -52,7 +52,7 @@
         </p>
       </div>
       <div class="salon-about-ballon">
-        <img src="@/assets/images/balloon.png" alt="Logo">
+        <img src="@/assets/images/balloon.png" alt="Logo" class="salon-about-ballon">
       </div>
     </div>
   </div>
@@ -85,48 +85,61 @@ export default {
 </script>
 <style lang="scss" scoped>
 .salon-head {
+  background: #F7F8FA;
   font-family: 'Helvetica';
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
-  padding: 50px;
-  margin: 50px;
+  text-align:center;
+  padding: 10px;
 }
 .salon-eye {
-  padding: 50px;
-  margin: 50px;
+  width: 90%;
+  line-height: 24px;
+  padding: 10px;
 }
 .salon-about-content1 {
   display: flex;
-  padding: 10px;
-  margin: 10px;
+  flex-wrap: wrap;
+  padding: 50px;
+  margin: 50px;
 }
 .salon-about-content2 {
   display: flex;
+  flex-wrap: wrap;
   padding: 10px;
+  margin: 10px;
+}
+.salon-about-woman{
+  width:300px;
   margin: 10px;
 }
 .salon-about-comment1 {
   background: #F7F8FA;
   border-radius: 50px;
-  width: 75%;
-  padding: 10px;
+  padding: 15px;
+  width:60%;
+  font-family: 'Helvetica';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
   margin: 10px;
 }
 .salon-about-comment2 {
   background: #F7F8FA;
+  font-family: 'Helvetica';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
   border-radius: 50px;
-  width: 75%;
-  padding: 10px;
+  width:50%;
+  padding: 15px;
   margin: 10px;
 }
-.salon-about-woman {
-  width: 25%;
-  margin: 10px;
-}
+
 .salon-about-ballon {
-  width: 25%;
+  width:300px;
   margin: 10px;
 }
 </style>

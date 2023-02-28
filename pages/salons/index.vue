@@ -5,9 +5,22 @@
         <v-icon>mdi-chevron-right</v-icon>
       </template>
     </v-breadcrumbs>
-    <div class="salons-head">
-    オンラインレッスンやファンクラブの新しいカタチを目指して提供している オンラインサロンについての説明がここに入ります。
-    <router-link :to="`/salons/about`" >はじめての方</router-link>
+    <div class="salon-head">
+    オンラインレッスンやファンクラブの新しいカタチを目指して提供している オンラインサロンについての説明がここに入ります。<br>
+    <router-link :to="`/salons/about`" class="btn1">
+      <img
+        src="~/assets/images/about_btn.png"
+        :width="360"
+        :aspect-ratio="16/6"
+      >
+    </router-link>
+    <router-link :to="`/salons/organizer`" class="btn1">
+      <img
+        src="~/assets/images/org_btn.png"
+        :width="360"
+        :aspect-ratio="16/6"
+      >
+    </router-link>
     </div>
     <div v-if="salons.length > 0" class="salons">
       <v-row no-gutters>
@@ -90,9 +103,15 @@ export default {
 </script>
 <style lang="scss" scoped>
 .salon-head {
+  text-align:center;
   width: 100%;
   height: 100px;
-  background: grey;
+  background: #F7F8FA;
+  font-family: 'Helvetica';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  margin: 10px;
 }
 .salon {
   text-decoration: none;
