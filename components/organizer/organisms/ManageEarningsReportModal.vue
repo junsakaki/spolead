@@ -57,121 +57,69 @@
           <div class="d-flex flex-column">
             <span>オンラインサロン</span>
             <div class="earning-row pt-2">
+              <div class="head text-center grey--text" />
               <div class="head text-center grey--text">
                 累計売上
               </div>
-              <div class="text-center ml-2">
-                {{ `${(20000).toLocaleString()}円` }}
-              </div>
-            </div>
-            <div class="earning-row pt-1">
               <div class="head text-center grey--text">
                 期間売上({{ modal ? '--' : format(new Date(`${selectedYearMonth}-01`), 'yyyy年MM月') }})
               </div>
-              <div class="text-center ml-2">
-                {{ modal ? '--' : `${(1000).toLocaleString()}円` }}
-              </div>
             </div>
-            <div class="earning-row pt-1">
+            <div v-for="salon in salons" :key="salon.id" class="earning-row pt-2">
               <div class="head text-center grey--text">
-                サロンA
+                {{ salon.name }}
               </div>
               <div class="text-center ml-2">
-                {{ `${(1000).toLocaleString()}円` }}
-              </div>
-            </div>
-            <div class="earning-row pt-1">
-              <div class="head text-center grey--text">
-                サロンB
+                {{ `${(salon.total.total_amount).toLocaleString()}円` }}
               </div>
               <div class="text-center ml-2">
-                {{ `${(1000).toLocaleString()}円` }}
+                {{ modal || !salon.term ? '--' : `${(salon.term.total_amount).toLocaleString()}円` }}
               </div>
             </div>
           </div>
-          <div class="d-flex flex-column mt-8">
+          <div class="d-flex flex-column mt-4">
             <span>クラウドファンディング</span>
             <div class="earning-row pt-2">
+              <div class="head text-center grey--text" />
               <div class="head text-center grey--text">
                 累計売上
               </div>
-              <div class="text-center ml-2">
-                {{ `${(20000).toLocaleString()}円` }}
-              </div>
-            </div>
-            <div class="earning-row pt-1">
               <div class="head text-center grey--text">
                 期間売上({{ modal ? '--' : format(new Date(`${selectedYearMonth}-01`), 'yyyy年MM月') }})
               </div>
-              <div class="text-center ml-2">
-                {{ modal ? '--' : `${(1000).toLocaleString()}円` }}
-              </div>
             </div>
-            <div class="earning-row pt-1">
+            <div v-for="fund in funds" :key="fund.id" class="earning-row pt-2">
               <div class="head text-center grey--text">
-                ファンドA - プラン1
+                {{ fund.name }}
               </div>
               <div class="text-center ml-2">
-                {{ `${(1000).toLocaleString()}円` }}
-              </div>
-            </div>
-            <div class="earning-row pt-1">
-              <div class="head text-center grey--text">
-                ファンドA - プラン2
+                {{ `${(fund.total.total_amount).toLocaleString()}円` }}
               </div>
               <div class="text-center ml-2">
-                {{ `${(1000).toLocaleString()}円` }}
-              </div>
-            </div>
-            <div class="earning-row pt-1">
-              <div class="head text-center grey--text">
-                ファンドB - プラン1
-              </div>
-              <div class="text-center ml-2">
-                {{ `${(1000).toLocaleString()}円` }}
-              </div>
-            </div>
-            <div class="earning-row pt-1">
-              <div class="head text-center grey--text">
-                ファンドB - プラン2
-              </div>
-              <div class="text-center ml-2">
-                {{ `${(1000).toLocaleString()}円` }}
+                {{ modal || !fund.term ? '--' : `${(fund.term.total_amount).toLocaleString()}円` }}
               </div>
             </div>
           </div>
           <div class="d-flex flex-column mt-4">
             <span>指導者マッチング</span>
             <div class="earning-row pt-2">
+              <div class="head text-center grey--text" />
               <div class="head text-center grey--text">
                 累計売上
               </div>
-              <div class="text-center ml-2">
-                {{ `${(20000).toLocaleString()}円` }}
-              </div>
-            </div>
-            <div class="earning-row pt-1">
               <div class="head text-center grey--text">
                 期間売上({{ modal ? '--' : format(new Date(`${selectedYearMonth}-01`), 'yyyy年MM月') }})
               </div>
-              <div class="text-center ml-2">
-                {{ modal ? '--' : `${(1000).toLocaleString()}円` }}
-              </div>
             </div>
-            <div class="earning-row pt-1">
+            <div v-for="lesson in lessons" :key="lesson.id" class="earning-row pt-2">
               <div class="head text-center grey--text">
-                募集A
+                {{ lesson.name }}
               </div>
               <div class="text-center ml-2">
-                {{ `${(1000).toLocaleString()}円` }}
-              </div>
-            </div>
-            <div class="earning-row pt-1">
-              <div class="head text-center grey--text">
-                募集B
+                {{ `${(lesson.total.total_amount).toLocaleString()}円` }}
               </div>
               <div class="text-center ml-2">
-                {{ `${(1000).toLocaleString()}円` }}
+                {{ modal || !lesson.term ? '--' : `${(lesson.term.total_amount).toLocaleString()}円` }}
               </div>
             </div>
           </div>
@@ -200,7 +148,10 @@ export default {
     return {
       selectedYearMonth: format(new Date(), 'yyyy-MM'),
       format,
-      modal: false
+      modal: false,
+      salons: [],
+      funds: [],
+      lessons: []
     }
   },
   created () {
@@ -217,9 +168,21 @@ export default {
           params: {
             userId: Number(localStorage.getItem('organizer_user_id')),
             term: null
+            // term: { year: 2023, month: 3 }
           }
         }).then((res) => {
-          // テストデータを挿入する
+          this.salons = []
+          res.data.total.salons.forEach((salon, i) => {
+            this.salons.push({ ...salon.salon, total: salon, term: res.data.term ? res.data.term.salons[i] : null })
+          })
+          // this.funds = []
+          // res.data.total.funds.forEach((fund, i) => {
+          //   this.funds.push({ ...fund.fund, total: fund, term: res.data.term ? res.data.term.funds[i] : null })
+          // })
+          // this.lessons = []
+          // res.data.total.lessons.forEach((salon, i) => {
+          //   this.lessons.push({ ...fund.fund, total: lesson, term: res.data.term ? res.data.term.lessons[i] : null })
+          // })
         })
     },
     selectYearMonth () {
@@ -235,7 +198,7 @@ export default {
 }
 .earning-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   .head {
     border-right: solid 1px;
   }
