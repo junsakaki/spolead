@@ -167,8 +167,8 @@ export default {
           api: 'getOrganizerManageReports',
           params: {
             userId: Number(localStorage.getItem('organizer_user_id')),
-            term: null
-            // term: { year: 2023, month: 3 }
+            term_year: this.selectedYearMonth.split('-')[0],
+            term_month: this.selectedYearMonth.split('-')[1]
           }
         }).then((res) => {
           this.salons = []
@@ -180,8 +180,8 @@ export default {
           //   this.funds.push({ ...fund.fund, total: fund, term: res.data.term ? res.data.term.funds[i] : null })
           // })
           // this.lessons = []
-          // res.data.total.lessons.forEach((salon, i) => {
-          //   this.lessons.push({ ...fund.fund, total: lesson, term: res.data.term ? res.data.term.lessons[i] : null })
+          // res.data.total.lessons.forEach((lesson, i) => {
+          //   this.lessons.push({ ...lesson.lesson, total: lesson, term: res.data.term ? res.data.term.lessons[i] : null })
           // })
         })
     },
