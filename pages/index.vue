@@ -18,6 +18,7 @@
     <SelectSports />
     <SelectArea />
     <BulletinBoard />
+    <ColumnsContents />
   </v-layout>
 </template>
 
@@ -26,13 +27,15 @@ import HomeHeader from '~/components/home/organisms/HomeHeader.vue'
 import SelectSports from '~/components/home/organisms/SelectSports.vue'
 import SelectArea from '~/components/home/organisms/SelectArea.vue'
 import BulletinBoard from '~/components/home/organisms/BulletinBoard.vue'
+import ColumnsContents from '~/components/home/organisms/ColumnsContents.vue'
 
 export default {
   components: {
     HomeHeader,
     SelectSports,
     SelectArea,
-    BulletinBoard
+    BulletinBoard,
+    ColumnsContents
   },
   data () {
     return {
