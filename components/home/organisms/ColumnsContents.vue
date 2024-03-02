@@ -1,9 +1,9 @@
 <template>
-    <section v-if="columnsContents.length === 5" class="carousel-container">
+    <section v-if="columnsContents.length === 9" class="carousel-container">
         <div>
             <h2>Spoleaderコラム</h2>
             <client-only>
-            <swiper :options="jsSlideColumns" class="swiper">
+            <swiper :options="swiperOptions" class="swiper">
                 <swiper-slide v-for="item in columnsContents" :key="item.id" class="carousel-item">
                 <a :href="item.url" target="_blank" class="columns-link">
                     <h3 class="columns-title">{{ item.title }}</h3>
@@ -14,8 +14,6 @@
                 </a>
                 </swiper-slide>
                 <div slot="pagination" class="swiper-pagination"></div>
-                <div slot="button-prev" class="swiper-button-prev"></div>
-                <div slot="button-next" class="swiper-button-next"></div>
             </swiper>
             </client-only>
         </div>
@@ -36,8 +34,16 @@ export default {
       swiperOptions: {
         // Swiperのオプションを設定
         loop: true,
+        autoplay: {
+          delay: 1000, // 自動再生の遅延時間（ミリ秒）
+          disableOnInteraction: false // ユーザーの操作後も自動再生を継続するかどうか
+        },
         pagination: {
           el: '.swiper-pagination'
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
         }
       },
       columnsContents: [],
@@ -58,16 +64,11 @@ export default {
         response.data.sort((a, b) => new Date(b.date_gmt) - new Date(a.date_gmt))
 
         // 最初の5件を取得
-        this.posts = response.data.slice(0, 5)
+        this.posts = response.data.slice(0, 9)
         for (const item of this.posts) {
-          // itemに対して必要な処理を行う
-        //   console.log(item.title.rendered) // 1件ずつのデータが出力されます
-          console.log(item._links['wp:featuredmedia'][0].href) // 1件ずつのデータが出力されます
           const res = await this.$axios.get(
             item._links['wp:featuredmedia'][0].href
           )
-          console.log('res')
-          console.log(res)
           const originalDate = new Date(item.date)
           const formattedDate = `${originalDate.getFullYear()}.${(originalDate.getMonth() + 1)
             .toString()
@@ -91,7 +92,7 @@ export default {
 /* カルーセル全体のスタイル */
 .carousel-container {
     width: 100%;
-    margin: 0 auto;
+    margin: 10 auto;
 }
 
 .swiper {
@@ -100,10 +101,16 @@ export default {
 }
 
 .carousel-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 300px; /* カルーセルアイテムの高さ */
+  margin: 0 10px;
+  min-width: 300px;
+  max-width: calc((100% / 5) - 20px);
+  white-space: normal;
+  background-color: #f4f4f4;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .swiper-pagination {
@@ -121,20 +128,27 @@ export default {
     width: 30px; /* ナビゲーションボタンの幅 */
     height: 30px; /* ナビゲーションボタンの高さ */
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.5); /* ナビゲーションボタンの背景色 */
+    background-color: rgba(190, 182, 182, 0.219); /* ナビゲーションボタンの背景色 */
     color: #333; /* ナビゲーションボタンの文字色 */
     cursor: pointer;
+    z-index: 1000; /* 他の要素よりも前面に表示 */
 }
 
 .swiper-button-prev {
-    left: 10px;
+    left: 30px;
 }
 
 .swiper-button-next {
     right: 10px;
 }
-
+.columns-title{
+  height: 100px;
+}
 .columns-thumbnail img {
-  width: 300px;
+  overflow: hidden;
+  width: 100%;
+  height: 160px;
+  aspect-ratio: 1.618 / 1;
+  object-fit: cover;
 }
 </style>
