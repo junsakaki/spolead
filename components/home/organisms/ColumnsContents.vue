@@ -1,7 +1,7 @@
 <template>
     <section v-if="columnsContents.length === 9" class="carousel-container">
         <div>
-            <h2>Spoleaderコラム</h2>
+            <h2>SpoLeadeRコラム</h2>
             <client-only>
             <swiper :options="swiperOptions" class="swiper">
                 <swiper-slide v-for="item in columnsContents" :key="item.id" class="carousel-item">

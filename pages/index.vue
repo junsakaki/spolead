@@ -17,8 +17,8 @@
     <HomeHeader />
     <SelectSports />
     <SelectArea />
-    <BulletinBoard />
     <ColumnsContents />
+    <BulletinBoard />
   </v-layout>
 </template>
 
