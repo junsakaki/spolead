@@ -44,7 +44,10 @@ export default {
         navigation: {
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev'
-        }
+        },
+        loopedSlides: 9, // 追加のループスライド数を設定
+        slidesPerView: 5, // 1度に表示するスライド数
+        spaceBetween: 20 // スライド間のスペース
       },
       columnsContents: [],
       posts: [] // データを格納するための配列
